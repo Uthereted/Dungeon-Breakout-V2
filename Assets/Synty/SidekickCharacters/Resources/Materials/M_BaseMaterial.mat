@@ -18,8 +18,7 @@ Material:
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
-  disabledShaderPasses:
-  - MOTIONVECTORS
+  disabledShaderPasses: []
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -127,7 +126,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _AlphaCutoff: 0.5
-    - _BUILTIN_QueueControl: 0
+    - _BUILTIN_QueueControl: -1
     - _BUILTIN_QueueOffset: 0
     - _BloodAmount: 0.5
     - _BumpScale: 1
@@ -167,7 +166,6 @@ Material:
     - _Grey: {r: 0.59748423, g: 0.59748423, b: 0.59748423, a: 0}
     - _SkinColor: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
-  m_AllowLocking: 1
 --- !u!114 &1754834652573278103
 MonoBehaviour:
   m_ObjectHideFlags: 11
@@ -180,7 +178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 10
+  version: 7
 --- !u!114 &4062801560533207257
 MonoBehaviour:
   m_ObjectHideFlags: 11

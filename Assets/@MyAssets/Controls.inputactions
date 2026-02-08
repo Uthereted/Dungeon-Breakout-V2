@@ -267,7 +267,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Camera",
+                    "name": "Look",
                     "type": "Value",
                     "id": "1cfbbaaa-24d4-4721-a16d-d9bf0e00ce70",
                     "expectedControlType": "Vector2",
@@ -449,7 +449,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Camera",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -460,7 +460,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Camera",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
