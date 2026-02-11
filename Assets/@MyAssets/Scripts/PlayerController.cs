@@ -15,10 +15,14 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 5f;
     public float groundCheckDistance = 0.25f;
 
+    [Header("Animation")]
+    public Animator animator;
+
     Rigidbody rb;
     Vector2 move;
     Vector2 look;
-    bool sprint;
+    bool sprintInput; // Variable para saber si pulsa la tecla
+    bool isSprinting; // Variable real (Tecla + Dirección correcta)
     bool jumpRequest;
 
     PlayerInput playerInput;
@@ -32,47 +36,94 @@ public class PlayerController : MonoBehaviour
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
         playerInput = GetComponent<PlayerInput>();
-        sprintAction = playerInput.actions["Sprint"]; 
+        sprintAction = playerInput.actions["Sprint"];
+
+        if (animator == null) animator = GetComponentInChildren<Animator>();
     }
 
-    // Input System (Send Messages)
     public void OnMove(InputValue v) => move = v.Get<Vector2>();
     public void OnLook(InputValue v) => look = v.Get<Vector2>();
     public void OnJump(InputValue v)
     {
-        if (v.isPressed)
-            jumpRequest = true;
+        if (v.isPressed) jumpRequest = true;
+    }
+
+    void Update()
+    {
+        // Calculamos aquí si realmente estamos corriendo para usarlo en todo el script
+        sprintInput = sprintAction.IsPressed();
+
+        // <--- CAMBIO IMPORTANTE: Lógica de restricción ---
+        // Solo corremos si pulsamos Shift Y nos movemos hacia adelante (move.y > 0)
+        // Esto cubre Adelante (0,1) y Diagonales delanteras (0.7, 0.7)
+        if (sprintInput && move.y > 0.1f)
+        {
+            isSprinting = true;
+        }
+        else
+        {
+            isSprinting = false;
+        }
+        // ------------------------------------------------
+
+        UpdateAnimation();
     }
 
     void FixedUpdate()
     {
-        sprint = sprintAction.IsPressed();
-
         Rotate();
         Move();
         Jump();
         jumpRequest = false;
     }
 
+    void UpdateAnimation()
+    {
+        if (animator == null) return;
+
+        // 1. Definir Intensidad Objetivo
+        // Si isSprinting es true (Shift + Adelante), intensidad 1. Si no, 0.5 (Andar).
+        float targetIntensity = isSprinting ? 1f : 0.5f;
+
+        // Si estamos quietos, intensidad 0
+        if (move.sqrMagnitude == 0) targetIntensity = 0f;
+
+        // 2. Calcular coordenadas para el Blend Tree
+        float targetX = move.x * targetIntensity;
+        float targetY = move.y * targetIntensity;
+
+        // 3. Enviar al Animator
+        animator.SetFloat("InputX", targetX, 0.1f, Time.deltaTime);
+        animator.SetFloat("InputY", targetY, 0.1f, Time.deltaTime);
+
+        // 4. Ajuste de velocidad de reproducción (Speed)
+        // Como ahora NUNCA corremos hacia atrás, no necesitamos trucos raros.
+        // Solo aceleramos la animación si realmente estamos en modo sprint.
+        if (isSprinting)
+        {
+            animator.speed = 1f;
+        }
+        else
+        {
+            animator.speed = 1f;
+        }
+    }
+
     void Rotate()
     {
         float yaw = look.x * mouseSensitivity;
-        Quaternion targetRot =
-            Quaternion.Euler(0f, rb.rotation.eulerAngles.y + yaw, 0f);
-
+        Quaternion targetRot = Quaternion.Euler(0f, rb.rotation.eulerAngles.y + yaw, 0f);
         rb.MoveRotation(targetRot);
     }
 
     void Move()
     {
-        Vector3 dir =
-            transform.forward * move.y +
-            transform.right * move.x;
+        Vector3 dir = transform.forward * move.y + transform.right * move.x;
 
-        if (dir.sqrMagnitude > 1f)
-            dir.Normalize();
+        if (dir.sqrMagnitude > 1f) dir.Normalize();
 
-        float speed = sprint ? sprintSpeed : walkSpeed;
+        // <--- CAMBIO: Usamos la variable isSprinting calculada arriba
+        float speed = isSprinting ? sprintSpeed : walkSpeed;
 
         Vector3 vel = rb.velocity;
         Vector3 target = dir * speed;
@@ -85,7 +136,6 @@ public class PlayerController : MonoBehaviour
         if (!jumpRequest) return;
         if (!IsGrounded()) return;
 
-        // reset Y antes de saltar
         Vector3 vel = rb.velocity;
         vel.y = 0f;
         rb.velocity = vel;
@@ -95,10 +145,6 @@ public class PlayerController : MonoBehaviour
 
     bool IsGrounded()
     {
-        return Physics.Raycast(
-            transform.position + Vector3.up * 0.1f,
-            Vector3.down,
-            0.1f + groundCheckDistance
-        );
+        return Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 0.1f + groundCheckDistance);
     }
 }
