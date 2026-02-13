@@ -81,32 +81,31 @@ public class PlayerController : MonoBehaviour
     {
         if (animator == null) return;
 
-        // 1. Definir Intensidad Objetivo
-        // Si isSprinting es true (Shift + Adelante), intensidad 1. Si no, 0.5 (Andar).
-        float targetIntensity = isSprinting ? 1f : 0.5f;
+        // --- 1. Calcular Intensidad ---
+        float targetIntensity = 0f;
+        if (move.sqrMagnitude > 0)
+        {
+            targetIntensity = isSprinting ? 1f : 0.5f;
+        }
 
-        // Si estamos quietos, intensidad 0
-        if (move.sqrMagnitude == 0) targetIntensity = 0f;
-
-        // 2. Calcular coordenadas para el Blend Tree
+        // --- 2. Movimiento (InputX, InputY) ---
         float targetX = move.x * targetIntensity;
         float targetY = move.y * targetIntensity;
 
-        // 3. Enviar al Animator
         animator.SetFloat("InputX", targetX, 0.1f, Time.deltaTime);
         animator.SetFloat("InputY", targetY, 0.1f, Time.deltaTime);
 
-        // 4. Ajuste de velocidad de reproducción (Speed)
-        // Como ahora NUNCA corremos hacia atrás, no necesitamos trucos raros.
-        // Solo aceleramos la animación si realmente estamos en modo sprint.
-        if (isSprinting)
-        {
-            animator.speed = 1f;
-        }
-        else
-        {
-            animator.speed = 1f;
-        }
+        // --- 3. GIRO (Turn) ---
+        animator.SetFloat("Turn", look.x, 0.1f, Time.deltaTime);
+
+        // --- 4. Saltos (Speed) ---
+        animator.SetFloat("Speed", targetIntensity);
+
+        // --- 5. Suelo ---
+        animator.SetBool("IsGrounded", IsGrounded());
+
+        // --- 6. Velocidad global ---
+        animator.speed = 1f;
     }
 
     void Rotate()
@@ -135,6 +134,8 @@ public class PlayerController : MonoBehaviour
     {
         if (!jumpRequest) return;
         if (!IsGrounded()) return;
+
+        if (animator != null) animator.SetTrigger("Jump");
 
         Vector3 vel = rb.velocity;
         vel.y = 0f;

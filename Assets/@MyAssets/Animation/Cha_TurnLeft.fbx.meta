@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: dc6a1a518b8c0cf4a8151b3e420cffea
+guid: d8ca970729cba6c4fb84df107e00baa4
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -33,11 +33,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: A_MOD_BL_Run_BckStrafeB_Masc
-      takeName: A_MOD_BL_Run_BckStrafeB_Masc
-      internalID: -2851694499725180437
+      name: Cha_TurnLeft
+      takeName: A_BaseLocomotion_Turn_Standing_90L_Masc
+      internalID: 2846082218582015304
       firstFrame: 1
-      lastFrame: 22
+      lastFrame: 30
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

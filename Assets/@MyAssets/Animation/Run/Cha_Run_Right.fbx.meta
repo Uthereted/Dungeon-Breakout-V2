@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7bfcec7d26f32d24daedf1ae777ab182
+guid: 749dc18dc759198449f4bfb5e10894d5
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -17,7 +17,10 @@ ModelImporter:
     removeConstantScaleCurves: 0
     motionNodeName: 
     rigImportErrors: 
-    rigImportWarnings: 
+    rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
+      copied configuration does not match position in animation file:\n\t'calf_r'
+      : position error = 1.124346 mm\n\t'thumb_01_l' : position error = 6.687264
+      mm\n\t'thumb_01_r' : position error = 9.599208 mm\n"
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -33,9 +36,9 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: A_MOD_BL_Run_BckStrafeL_Masc
-      takeName: A_MOD_BL_Run_BckStrafeL_Masc
-      internalID: 5291342154283983521
+      name: Cha_Run_Right
+      takeName: A_MOD_BL_Run_FwdStrafeR_Masc
+      internalID: 1898340749838137639
       firstFrame: 1
       lastFrame: 22
       wrapMode: 0

@@ -33,7 +33,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: A_MOD_BL_Walk_BckStrafeR_Masc
+      name: Cha_Walk_BackRight
       takeName: A_MOD_BL_Walk_BckStrafeR_Masc
       internalID: 7014882981499178196
       firstFrame: 1
