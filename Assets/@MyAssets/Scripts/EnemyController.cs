@@ -5,30 +5,40 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour
 {
     [Header("Referencias")]
-    public Transform player;        // Arrastra aquí a tu Jugador
+    public Transform player;
+    public Animator animator;
 
-    [Header("Velocidades")]
-    public float patrolSpeed = 2f;  // Velocidad tranquila al patrullar
-    public float chaseSpeed = 4.5f; // Velocidad rápida al perseguir
+    [Header("Configuración")]
+    public float patrolSpeed = 2f;
+    public float chaseSpeed = 4.5f;
+    public float patrolRadius = 10f;
+    public float detectionRange = 8f;
+    public float loseRange = 12f;
+    public float attackRange = 1.8f;
+    public float attackCooldown = 1.5f;
+    public float minWaitTime = 1f;
+    public float maxWaitTime = 3f;
 
-    [Header("Comportamiento Patrulla")]
-    public float patrolRadius = 10f;    // Cuánto se aleja del punto de inicio
-    public float minWaitTime = 1f;      // Tiempo mínimo de espera al llegar
-    public float maxWaitTime = 3f;      // Tiempo máximo de espera
+    [Header("Animación (simple)")]
+    public float animDamp = 0.12f;      // suaviza cambios de Speed
+    public float attackLockTime = 0.7f; // tiempo bloqueado durante ataque (ajústalo al clip)
 
-    [Header("Comportamiento Persecución")]
-    public float detectionRange = 8f;   // A qué distancia te ve
-
-    // Variables internas
     private NavMeshAgent agent;
-    private float waitTimer;      // Contador para la espera
-    private bool isChasing;       // Para saber en qué estado estamos
+    private float waitTimer;
+    private float attackTimer;
+    private bool isChasing;
+
+    private float attackLockTimer;
+
+    // hashes para evitar typos
+    int SpeedHash = Animator.StringToHash("Speed");
+    int IsChasingHash = Animator.StringToHash("IsChasing");
+    int AttackHash = Animator.StringToHash("Attack");
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-
-        // Al empezar, le damos un destino aleatorio inicial
+        agent.speed = patrolSpeed;
         GoToRandomPoint();
     }
 
@@ -36,90 +46,114 @@ public class EnemyController : MonoBehaviour
     {
         if (player == null) return;
 
-        // 1. Calcular distancia con el jugador
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        float dist = Vector3.Distance(transform.position, player.position);
+        attackTimer -= Time.deltaTime;
+        if (attackLockTimer > 0f) attackLockTimer -= Time.deltaTime;
 
-        // --- LÓGICA DE DECISIÓN ---
-        if (distanceToPlayer < detectionRange)
+        if (!isChasing && dist < detectionRange)
         {
-            EngageChase(); // MODO PERSECUCIÓN
+            isChasing = true;
+            agent.speed = chaseSpeed;
+            agent.stoppingDistance = attackRange * 0.9f;
         }
-        else
-        {
-            EngagePatrol(); // MODO PATRULLA
-        }
-    }
-
-    void EngageChase()
-    {
-        isChasing = true;
-        agent.speed = chaseSpeed; // Ponemos el turbo
-        agent.stoppingDistance = 1.5f; // Para no chocarse contigo
-
-        // Actualizamos el destino constantemente a donde esté el jugador
-        agent.SetDestination(player.position);
-    }
-
-    void EngagePatrol()
-    {
-        // Si acabamos de salir de una persecución, reseteamos la velocidad
-        if (isChasing)
+        else if (isChasing && dist > loseRange)
         {
             isChasing = false;
             agent.speed = patrolSpeed;
-            agent.stoppingDistance = 0f; // Al patrullar queremos llegar justo al punto
+            agent.stoppingDistance = 0f;
+            GoToRandomPoint();
         }
 
-        // --- LÓGICA DE LLEGADA Y ESPERA ---
-
-        // Comprobamos si ha llegado a su destino
-        // (!pathPending es importante para que no crea que ha llegado mientras calcula la ruta)
-        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        // Si está “bloqueado” por ataque, no muevas
+        if (attackLockTimer > 0f)
         {
-            // Si ha llegado, restamos tiempo
-            waitTimer -= Time.deltaTime;
-
-            if (waitTimer <= 0)
+            agent.isStopped = true;
+            agent.velocity = Vector3.zero;
+            agent.ResetPath();
+            LookAtPlayer();
+        }
+        else
+        {
+            if (isChasing)
             {
-                // Si el tiempo se acabó, buscamos nuevo punto y reseteamos timer
-                GoToRandomPoint();
+                if (dist <= attackRange)
+                {
+                    agent.isStopped = true;
+                    agent.velocity = Vector3.zero;
+                    agent.ResetPath();
+                    LookAtPlayer();
+
+                    if (attackTimer <= 0f)
+                    {
+                        animator.SetTrigger(AttackHash);
+                        attackTimer = attackCooldown;
+                        attackLockTimer = attackLockTime;
+                    }
+                }
+                else
+                {
+                    agent.isStopped = false;
+                    agent.SetDestination(player.position);
+                }
+            }
+            else
+            {
+                agent.isStopped = false;
+
+                if (!agent.pathPending && agent.remainingDistance < 0.5f)
+                {
+                    waitTimer -= Time.deltaTime;
+                    if (waitTimer <= 0f) GoToRandomPoint();
+                }
             }
         }
+
+        UpdateAnimations();
     }
 
     void GoToRandomPoint()
     {
-        // Elegimos un tiempo de espera aleatorio para la PRÓXIMA vez que pare
         waitTimer = Random.Range(minWaitTime, maxWaitTime);
-
-        // Buscamos un punto en el mapa
-        Vector3 randomPoint = GetRandomNavMeshPoint();
-        agent.SetDestination(randomPoint);
-    }
-
-    // Función auxiliar para encontrar un punto válido en el suelo azul (NavMesh)
-    Vector3 GetRandomNavMeshPoint()
-    {
-        // Buscamos un punto aleatorio dentro de una esfera
-        Vector3 randomDirection = Random.insideUnitSphere * patrolRadius;
-        randomDirection += transform.position;
+        Vector3 randomDir = Random.insideUnitSphere * patrolRadius + transform.position;
+        randomDir.y = 0f;
 
         NavMeshHit hit;
-        // SamplePosition intenta encontrar el punto válido más cercano en el suelo
-        NavMesh.SamplePosition(randomDirection, out hit, patrolRadius, 1);
-
-        return hit.position;
+        NavMesh.SamplePosition(randomDir, out hit, patrolRadius, NavMesh.AllAreas);
+        agent.SetDestination(hit.position);
     }
 
-    // Dibujos para ver los rangos en el Editor
+    void LookAtPlayer()
+    {
+        Vector3 dir = (player.position - transform.position);
+        dir.y = 0;
+        if (dir.sqrMagnitude > 0.001f)
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10f * Time.deltaTime);
+    }
+
+    void UpdateAnimations()
+    {
+        if (animator == null) return;
+
+        animator.SetBool(IsChasingHash, isChasing);
+
+        // Speed 0..1 (patrulla ~0.44, chase ~1 si chaseSpeed=4.5 y patrolSpeed=2)
+        float speed01 = (chaseSpeed <= 0.01f) ? 0f : Mathf.Clamp01(agent.velocity.magnitude / chaseSpeed);
+
+        if (agent.isStopped || agent.velocity.magnitude < 0.05f || attackLockTimer > 0f)
+            speed01 = 0f;
+
+        animator.SetFloat(SpeedHash, speed01, animDamp, Time.deltaTime);
+    }
+
     void OnDrawGizmosSelected()
     {
-        // Círculo ROJO = Rango de visión (Detection)
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
 
-        // Círculo AMARILLO = Zona de patrulla
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, patrolRadius);
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawWireSphere(transform.position, loseRange);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 }
