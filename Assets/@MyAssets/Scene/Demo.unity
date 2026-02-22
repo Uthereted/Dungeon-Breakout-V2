@@ -7023,6 +7023,8 @@ MonoBehaviour:
   maxWaitTime: 4
   animDamp: 0.12
   attackLockTime: 1.8
+  hitDelay: 1
+  playerHealth: {fileID: 0}
 --- !u!195 &357036882
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -7105,6 +7107,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &357036888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 357036878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ef80b56bbcc66349a7c82ce5dbacfbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHits: 3
+  animator: {fileID: 0}
+  dieTrigger: Die
+  groundOffset: 0.02
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &370809620 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 150698, guid: b024094a7a82a15488ff3693e5c8568e, type: 3}
@@ -23636,6 +23657,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3573275766821821167, guid: a927865775277e345b509e9af246719f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1069017160}
+    - targetCorrespondingSourceObject: {fileID: 3573275766821821167, guid: a927865775277e345b509e9af246719f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1069017161}
   m_SourcePrefab: {fileID: 100100000, guid: a927865775277e345b509e9af246719f, type: 3}
 --- !u!4 &1069017153 stripped
 Transform:
@@ -23715,6 +23739,7 @@ MonoBehaviour:
   jumpForce: 5
   groundCheckDistance: 0.25
   animator: {fileID: 1069017159}
+  movementLocked: 0
 --- !u!114 &1069017158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23836,7 +23861,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   swordSocket: {fileID: 1154887961}
   interactUI: {fileID: 2074915813}
+  animator: {fileID: 0}
+  player: {fileID: 0}
+  grabTrigger: Grab
+  grabDuration: 1
   grabText: Grab [F]
+  attackTrigger: Attack
+  attackCooldown: 0.6
+  attackRange: 2
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 0
+--- !u!114 &1069017161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1069017154}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ef80b56bbcc66349a7c82ce5dbacfbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHits: 3
+  animator: {fileID: 0}
+  dieTrigger: Die
+  groundOffset: 0.02
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1001 &1081972195
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31949,13 +32003,16 @@ PrefabInstance:
       addedObject: {fileID: 357036882}
     - targetCorrespondingSourceObject: {fileID: 171076, guid: 2ea27af6ead886c4d93bb53d28c6c25b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 357036881}
-    - targetCorrespondingSourceObject: {fileID: 171076, guid: 2ea27af6ead886c4d93bb53d28c6c25b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 357036887}
     - targetCorrespondingSourceObject: {fileID: 171076, guid: 2ea27af6ead886c4d93bb53d28c6c25b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 357036886}
+    - targetCorrespondingSourceObject: {fileID: 171076, guid: 2ea27af6ead886c4d93bb53d28c6c25b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 357036881}
+    - targetCorrespondingSourceObject: {fileID: 171076, guid: 2ea27af6ead886c4d93bb53d28c6c25b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 357036888}
   m_SourcePrefab: {fileID: 100100000, guid: 2ea27af6ead886c4d93bb53d28c6c25b, type: 3}
 --- !u!1001 &1458193272
 PrefabInstance:

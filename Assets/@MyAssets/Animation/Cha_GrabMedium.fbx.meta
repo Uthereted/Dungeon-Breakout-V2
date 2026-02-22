@@ -1,0 +1,1821 @@
+fileFormatVersion: 2
+guid: 4c4bd2fa55c6f22498a891039c862b68
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: Head
+  - first:
+      1: 100002
+    second: Head1_Mesh
+  - first:
+      1: 100004
+    second: Head2_Mesh
+  - first:
+      1: 100006
+    second: Head3_Mesh
+  - first:
+      1: 100008
+    second: HeadEnd
+  - first:
+      1: 100010
+    second: Hips
+  - first:
+      1: 100012
+    second: Hips1_Mesh
+  - first:
+      1: 100014
+    second: Hips2_Mesh
+  - first:
+      1: 100016
+    second: //RootNode
+  - first:
+      1: 100018
+    second: LeftArm
+  - first:
+      1: 100020
+    second: LeftArm_Mesh
+  - first:
+      1: 100022
+    second: LeftFoot
+  - first:
+      1: 100024
+    second: LeftFoot_Mesh
+  - first:
+      1: 100026
+    second: LeftForeArm
+  - first:
+      1: 100028
+    second: LeftForeArm_Mesh
+  - first:
+      1: 100030
+    second: LeftHand
+  - first:
+      1: 100032
+    second: LeftHand_Mesh
+  - first:
+      1: 100034
+    second: LeftHandIndex1
+  - first:
+      1: 100036
+    second: LeftHandIndex1_Mesh
+  - first:
+      1: 100038
+    second: LeftHandIndex2
+  - first:
+      1: 100040
+    second: LeftHandIndex2_Mesh
+  - first:
+      1: 100042
+    second: LeftHandIndex3
+  - first:
+      1: 100044
+    second: LeftHandIndex3_Mesh
+  - first:
+      1: 100046
+    second: LeftHandIndex4
+  - first:
+      1: 100048
+    second: LeftHandMiddle1
+  - first:
+      1: 100050
+    second: LeftHandMiddle1_Mesh
+  - first:
+      1: 100052
+    second: LeftHandMiddle2
+  - first:
+      1: 100054
+    second: LeftHandMiddle2_Mesh
+  - first:
+      1: 100056
+    second: LeftHandMiddle3
+  - first:
+      1: 100058
+    second: LeftHandMiddle3_Mesh
+  - first:
+      1: 100060
+    second: LeftHandMiddle4
+  - first:
+      1: 100062
+    second: LeftHandPinky1
+  - first:
+      1: 100064
+    second: LeftHandPinky1_Mesh
+  - first:
+      1: 100066
+    second: LeftHandPinky2
+  - first:
+      1: 100068
+    second: LeftHandPinky2_Mesh
+  - first:
+      1: 100070
+    second: LeftHandPinky3
+  - first:
+      1: 100072
+    second: LeftHandPinky3_Mesh
+  - first:
+      1: 100074
+    second: LeftHandPinky4
+  - first:
+      1: 100076
+    second: LeftHandRing1
+  - first:
+      1: 100078
+    second: LeftHandRing1_Mesh
+  - first:
+      1: 100080
+    second: LeftHandRing2
+  - first:
+      1: 100082
+    second: LeftHandRing2_Mesh
+  - first:
+      1: 100084
+    second: LeftHandRing3
+  - first:
+      1: 100086
+    second: LeftHandRing3_Mesh
+  - first:
+      1: 100088
+    second: LeftHandRing4
+  - first:
+      1: 100090
+    second: LeftHandThumb1
+  - first:
+      1: 100092
+    second: LeftHandThumb1_Mesh
+  - first:
+      1: 100094
+    second: LeftHandThumb2
+  - first:
+      1: 100096
+    second: LeftHandThumb2_Mesh
+  - first:
+      1: 100098
+    second: LeftHandThumb3
+  - first:
+      1: 100100
+    second: LeftHandThumb3_Mesh
+  - first:
+      1: 100102
+    second: LeftHandThumb4
+  - first:
+      1: 100104
+    second: LeftLeg
+  - first:
+      1: 100106
+    second: LeftLeg1_Mesh
+  - first:
+      1: 100108
+    second: LeftLeg2_Mesh
+  - first:
+      1: 100110
+    second: LeftShoulder
+  - first:
+      1: 100112
+    second: LeftShoulder_Mesh
+  - first:
+      1: 100114
+    second: LeftToe
+  - first:
+      1: 100116
+    second: LeftToe_Mesh
+  - first:
+      1: 100118
+    second: LeftToeEnd
+  - first:
+      1: 100120
+    second: LeftUpLeg
+  - first:
+      1: 100122
+    second: LeftUpLeg_Mesh
+  - first:
+      1: 100124
+    second: Neck
+  - first:
+      1: 100126
+    second: Neck_Mesh
+  - first:
+      1: 100128
+    second: RightArm
+  - first:
+      1: 100130
+    second: RightArm_Mesh
+  - first:
+      1: 100132
+    second: RightFoot
+  - first:
+      1: 100134
+    second: RightFoot_Mesh
+  - first:
+      1: 100136
+    second: RightForeArm
+  - first:
+      1: 100138
+    second: RightForeArm_Mesh
+  - first:
+      1: 100140
+    second: RightHand
+  - first:
+      1: 100142
+    second: RightHand_Mesh
+  - first:
+      1: 100144
+    second: RightHandIndex1
+  - first:
+      1: 100146
+    second: RightHandIndex1_Mesh
+  - first:
+      1: 100148
+    second: RightHandIndex2
+  - first:
+      1: 100150
+    second: RightHandIndex2_Mesh
+  - first:
+      1: 100152
+    second: RightHandIndex3
+  - first:
+      1: 100154
+    second: RightHandIndex3_Mesh
+  - first:
+      1: 100156
+    second: RightHandIndex4
+  - first:
+      1: 100158
+    second: RightHandMiddle1
+  - first:
+      1: 100160
+    second: RightHandMiddle1_Mesh
+  - first:
+      1: 100162
+    second: RightHandMiddle2
+  - first:
+      1: 100164
+    second: RightHandMiddle2_Mesh
+  - first:
+      1: 100166
+    second: RightHandMiddle3
+  - first:
+      1: 100168
+    second: RightHandMiddle3_Mesh
+  - first:
+      1: 100170
+    second: RightHandMiddle4
+  - first:
+      1: 100172
+    second: RightHandPinky1
+  - first:
+      1: 100174
+    second: RightHandPinky1_Mesh
+  - first:
+      1: 100176
+    second: RightHandPinky2
+  - first:
+      1: 100178
+    second: RightHandPinky2_Mesh
+  - first:
+      1: 100180
+    second: RightHandPinky3
+  - first:
+      1: 100182
+    second: RightHandPinky3_Mesh
+  - first:
+      1: 100184
+    second: RightHandPinky4
+  - first:
+      1: 100186
+    second: RightHandRing1
+  - first:
+      1: 100188
+    second: RightHandRing1_Mesh
+  - first:
+      1: 100190
+    second: RightHandRing2
+  - first:
+      1: 100192
+    second: RightHandRing2_Mesh
+  - first:
+      1: 100194
+    second: RightHandRing3
+  - first:
+      1: 100196
+    second: RightHandRing3_Mesh
+  - first:
+      1: 100198
+    second: RightHandRing4
+  - first:
+      1: 100200
+    second: RightHandThumb1
+  - first:
+      1: 100202
+    second: RightHandThumb1_Mesh
+  - first:
+      1: 100204
+    second: RightHandThumb2
+  - first:
+      1: 100206
+    second: RightHandThumb2_Mesh
+  - first:
+      1: 100208
+    second: RightHandThumb3
+  - first:
+      1: 100210
+    second: RightHandThumb3_Mesh
+  - first:
+      1: 100212
+    second: RightHandThumb4
+  - first:
+      1: 100214
+    second: RightLeg
+  - first:
+      1: 100216
+    second: RightLeg1_Mesh
+  - first:
+      1: 100218
+    second: RightLeg2_Mesh
+  - first:
+      1: 100220
+    second: RightShoulder
+  - first:
+      1: 100222
+    second: RightShoulder_Mesh
+  - first:
+      1: 100224
+    second: RightToe
+  - first:
+      1: 100226
+    second: RightToe_Mesh
+  - first:
+      1: 100228
+    second: RightToeEnd
+  - first:
+      1: 100230
+    second: RightUpLeg
+  - first:
+      1: 100232
+    second: RightUpLeg_Mesh
+  - first:
+      1: 100234
+    second: Root
+  - first:
+      1: 100236
+    second: Spine1
+  - first:
+      1: 100238
+    second: Spine1_Mesh
+  - first:
+      1: 100240
+    second: Spine2
+  - first:
+      1: 100242
+    second: Spine2_Mesh
+  - first:
+      1: 100244
+    second: Spine3
+  - first:
+      4: 400000
+    second: Head
+  - first:
+      4: 400002
+    second: Head1_Mesh
+  - first:
+      4: 400004
+    second: Head2_Mesh
+  - first:
+      4: 400006
+    second: Head3_Mesh
+  - first:
+      4: 400008
+    second: HeadEnd
+  - first:
+      4: 400010
+    second: Hips
+  - first:
+      4: 400012
+    second: Hips1_Mesh
+  - first:
+      4: 400014
+    second: Hips2_Mesh
+  - first:
+      4: 400016
+    second: //RootNode
+  - first:
+      4: 400018
+    second: LeftArm
+  - first:
+      4: 400020
+    second: LeftArm_Mesh
+  - first:
+      4: 400022
+    second: LeftFoot
+  - first:
+      4: 400024
+    second: LeftFoot_Mesh
+  - first:
+      4: 400026
+    second: LeftForeArm
+  - first:
+      4: 400028
+    second: LeftForeArm_Mesh
+  - first:
+      4: 400030
+    second: LeftHand
+  - first:
+      4: 400032
+    second: LeftHand_Mesh
+  - first:
+      4: 400034
+    second: LeftHandIndex1
+  - first:
+      4: 400036
+    second: LeftHandIndex1_Mesh
+  - first:
+      4: 400038
+    second: LeftHandIndex2
+  - first:
+      4: 400040
+    second: LeftHandIndex2_Mesh
+  - first:
+      4: 400042
+    second: LeftHandIndex3
+  - first:
+      4: 400044
+    second: LeftHandIndex3_Mesh
+  - first:
+      4: 400046
+    second: LeftHandIndex4
+  - first:
+      4: 400048
+    second: LeftHandMiddle1
+  - first:
+      4: 400050
+    second: LeftHandMiddle1_Mesh
+  - first:
+      4: 400052
+    second: LeftHandMiddle2
+  - first:
+      4: 400054
+    second: LeftHandMiddle2_Mesh
+  - first:
+      4: 400056
+    second: LeftHandMiddle3
+  - first:
+      4: 400058
+    second: LeftHandMiddle3_Mesh
+  - first:
+      4: 400060
+    second: LeftHandMiddle4
+  - first:
+      4: 400062
+    second: LeftHandPinky1
+  - first:
+      4: 400064
+    second: LeftHandPinky1_Mesh
+  - first:
+      4: 400066
+    second: LeftHandPinky2
+  - first:
+      4: 400068
+    second: LeftHandPinky2_Mesh
+  - first:
+      4: 400070
+    second: LeftHandPinky3
+  - first:
+      4: 400072
+    second: LeftHandPinky3_Mesh
+  - first:
+      4: 400074
+    second: LeftHandPinky4
+  - first:
+      4: 400076
+    second: LeftHandRing1
+  - first:
+      4: 400078
+    second: LeftHandRing1_Mesh
+  - first:
+      4: 400080
+    second: LeftHandRing2
+  - first:
+      4: 400082
+    second: LeftHandRing2_Mesh
+  - first:
+      4: 400084
+    second: LeftHandRing3
+  - first:
+      4: 400086
+    second: LeftHandRing3_Mesh
+  - first:
+      4: 400088
+    second: LeftHandRing4
+  - first:
+      4: 400090
+    second: LeftHandThumb1
+  - first:
+      4: 400092
+    second: LeftHandThumb1_Mesh
+  - first:
+      4: 400094
+    second: LeftHandThumb2
+  - first:
+      4: 400096
+    second: LeftHandThumb2_Mesh
+  - first:
+      4: 400098
+    second: LeftHandThumb3
+  - first:
+      4: 400100
+    second: LeftHandThumb3_Mesh
+  - first:
+      4: 400102
+    second: LeftHandThumb4
+  - first:
+      4: 400104
+    second: LeftLeg
+  - first:
+      4: 400106
+    second: LeftLeg1_Mesh
+  - first:
+      4: 400108
+    second: LeftLeg2_Mesh
+  - first:
+      4: 400110
+    second: LeftShoulder
+  - first:
+      4: 400112
+    second: LeftShoulder_Mesh
+  - first:
+      4: 400114
+    second: LeftToe
+  - first:
+      4: 400116
+    second: LeftToe_Mesh
+  - first:
+      4: 400118
+    second: LeftToeEnd
+  - first:
+      4: 400120
+    second: LeftUpLeg
+  - first:
+      4: 400122
+    second: LeftUpLeg_Mesh
+  - first:
+      4: 400124
+    second: Neck
+  - first:
+      4: 400126
+    second: Neck_Mesh
+  - first:
+      4: 400128
+    second: RightArm
+  - first:
+      4: 400130
+    second: RightArm_Mesh
+  - first:
+      4: 400132
+    second: RightFoot
+  - first:
+      4: 400134
+    second: RightFoot_Mesh
+  - first:
+      4: 400136
+    second: RightForeArm
+  - first:
+      4: 400138
+    second: RightForeArm_Mesh
+  - first:
+      4: 400140
+    second: RightHand
+  - first:
+      4: 400142
+    second: RightHand_Mesh
+  - first:
+      4: 400144
+    second: RightHandIndex1
+  - first:
+      4: 400146
+    second: RightHandIndex1_Mesh
+  - first:
+      4: 400148
+    second: RightHandIndex2
+  - first:
+      4: 400150
+    second: RightHandIndex2_Mesh
+  - first:
+      4: 400152
+    second: RightHandIndex3
+  - first:
+      4: 400154
+    second: RightHandIndex3_Mesh
+  - first:
+      4: 400156
+    second: RightHandIndex4
+  - first:
+      4: 400158
+    second: RightHandMiddle1
+  - first:
+      4: 400160
+    second: RightHandMiddle1_Mesh
+  - first:
+      4: 400162
+    second: RightHandMiddle2
+  - first:
+      4: 400164
+    second: RightHandMiddle2_Mesh
+  - first:
+      4: 400166
+    second: RightHandMiddle3
+  - first:
+      4: 400168
+    second: RightHandMiddle3_Mesh
+  - first:
+      4: 400170
+    second: RightHandMiddle4
+  - first:
+      4: 400172
+    second: RightHandPinky1
+  - first:
+      4: 400174
+    second: RightHandPinky1_Mesh
+  - first:
+      4: 400176
+    second: RightHandPinky2
+  - first:
+      4: 400178
+    second: RightHandPinky2_Mesh
+  - first:
+      4: 400180
+    second: RightHandPinky3
+  - first:
+      4: 400182
+    second: RightHandPinky3_Mesh
+  - first:
+      4: 400184
+    second: RightHandPinky4
+  - first:
+      4: 400186
+    second: RightHandRing1
+  - first:
+      4: 400188
+    second: RightHandRing1_Mesh
+  - first:
+      4: 400190
+    second: RightHandRing2
+  - first:
+      4: 400192
+    second: RightHandRing2_Mesh
+  - first:
+      4: 400194
+    second: RightHandRing3
+  - first:
+      4: 400196
+    second: RightHandRing3_Mesh
+  - first:
+      4: 400198
+    second: RightHandRing4
+  - first:
+      4: 400200
+    second: RightHandThumb1
+  - first:
+      4: 400202
+    second: RightHandThumb1_Mesh
+  - first:
+      4: 400204
+    second: RightHandThumb2
+  - first:
+      4: 400206
+    second: RightHandThumb2_Mesh
+  - first:
+      4: 400208
+    second: RightHandThumb3
+  - first:
+      4: 400210
+    second: RightHandThumb3_Mesh
+  - first:
+      4: 400212
+    second: RightHandThumb4
+  - first:
+      4: 400214
+    second: RightLeg
+  - first:
+      4: 400216
+    second: RightLeg1_Mesh
+  - first:
+      4: 400218
+    second: RightLeg2_Mesh
+  - first:
+      4: 400220
+    second: RightShoulder
+  - first:
+      4: 400222
+    second: RightShoulder_Mesh
+  - first:
+      4: 400224
+    second: RightToe
+  - first:
+      4: 400226
+    second: RightToe_Mesh
+  - first:
+      4: 400228
+    second: RightToeEnd
+  - first:
+      4: 400230
+    second: RightUpLeg
+  - first:
+      4: 400232
+    second: RightUpLeg_Mesh
+  - first:
+      4: 400234
+    second: Root
+  - first:
+      4: 400236
+    second: Spine1
+  - first:
+      4: 400238
+    second: Spine1_Mesh
+  - first:
+      4: 400240
+    second: Spine2
+  - first:
+      4: 400242
+    second: Spine2_Mesh
+  - first:
+      4: 400244
+    second: Spine3
+  - first:
+      23: 2300000
+    second: Head1_Mesh
+  - first:
+      23: 2300002
+    second: Head2_Mesh
+  - first:
+      23: 2300004
+    second: Head3_Mesh
+  - first:
+      23: 2300006
+    second: Hips1_Mesh
+  - first:
+      23: 2300008
+    second: Hips2_Mesh
+  - first:
+      23: 2300010
+    second: LeftArm_Mesh
+  - first:
+      23: 2300012
+    second: LeftFoot_Mesh
+  - first:
+      23: 2300014
+    second: LeftForeArm_Mesh
+  - first:
+      23: 2300016
+    second: LeftHand_Mesh
+  - first:
+      23: 2300018
+    second: LeftHandIndex1_Mesh
+  - first:
+      23: 2300020
+    second: LeftHandIndex2_Mesh
+  - first:
+      23: 2300022
+    second: LeftHandIndex3_Mesh
+  - first:
+      23: 2300024
+    second: LeftHandMiddle1_Mesh
+  - first:
+      23: 2300026
+    second: LeftHandMiddle2_Mesh
+  - first:
+      23: 2300028
+    second: LeftHandMiddle3_Mesh
+  - first:
+      23: 2300030
+    second: LeftHandPinky1_Mesh
+  - first:
+      23: 2300032
+    second: LeftHandPinky2_Mesh
+  - first:
+      23: 2300034
+    second: LeftHandPinky3_Mesh
+  - first:
+      23: 2300036
+    second: LeftHandRing1_Mesh
+  - first:
+      23: 2300038
+    second: LeftHandRing2_Mesh
+  - first:
+      23: 2300040
+    second: LeftHandRing3_Mesh
+  - first:
+      23: 2300042
+    second: LeftHandThumb1_Mesh
+  - first:
+      23: 2300044
+    second: LeftHandThumb2_Mesh
+  - first:
+      23: 2300046
+    second: LeftHandThumb3_Mesh
+  - first:
+      23: 2300048
+    second: LeftLeg1_Mesh
+  - first:
+      23: 2300050
+    second: LeftLeg2_Mesh
+  - first:
+      23: 2300052
+    second: LeftShoulder_Mesh
+  - first:
+      23: 2300054
+    second: LeftToe_Mesh
+  - first:
+      23: 2300056
+    second: LeftUpLeg_Mesh
+  - first:
+      23: 2300058
+    second: Neck_Mesh
+  - first:
+      23: 2300060
+    second: RightArm_Mesh
+  - first:
+      23: 2300062
+    second: RightFoot_Mesh
+  - first:
+      23: 2300064
+    second: RightForeArm_Mesh
+  - first:
+      23: 2300066
+    second: RightHand_Mesh
+  - first:
+      23: 2300068
+    second: RightHandIndex1_Mesh
+  - first:
+      23: 2300070
+    second: RightHandIndex2_Mesh
+  - first:
+      23: 2300072
+    second: RightHandIndex3_Mesh
+  - first:
+      23: 2300074
+    second: RightHandMiddle1_Mesh
+  - first:
+      23: 2300076
+    second: RightHandMiddle2_Mesh
+  - first:
+      23: 2300078
+    second: RightHandMiddle3_Mesh
+  - first:
+      23: 2300080
+    second: RightHandPinky1_Mesh
+  - first:
+      23: 2300082
+    second: RightHandPinky2_Mesh
+  - first:
+      23: 2300084
+    second: RightHandPinky3_Mesh
+  - first:
+      23: 2300086
+    second: RightHandRing1_Mesh
+  - first:
+      23: 2300088
+    second: RightHandRing2_Mesh
+  - first:
+      23: 2300090
+    second: RightHandRing3_Mesh
+  - first:
+      23: 2300092
+    second: RightHandThumb1_Mesh
+  - first:
+      23: 2300094
+    second: RightHandThumb2_Mesh
+  - first:
+      23: 2300096
+    second: RightHandThumb3_Mesh
+  - first:
+      23: 2300098
+    second: RightLeg1_Mesh
+  - first:
+      23: 2300100
+    second: RightLeg2_Mesh
+  - first:
+      23: 2300102
+    second: RightShoulder_Mesh
+  - first:
+      23: 2300104
+    second: RightToe_Mesh
+  - first:
+      23: 2300106
+    second: RightUpLeg_Mesh
+  - first:
+      23: 2300108
+    second: Spine1_Mesh
+  - first:
+      23: 2300110
+    second: Spine2_Mesh
+  - first:
+      33: 3300000
+    second: Head1_Mesh
+  - first:
+      33: 3300002
+    second: Head2_Mesh
+  - first:
+      33: 3300004
+    second: Head3_Mesh
+  - first:
+      33: 3300006
+    second: Hips1_Mesh
+  - first:
+      33: 3300008
+    second: Hips2_Mesh
+  - first:
+      33: 3300010
+    second: LeftArm_Mesh
+  - first:
+      33: 3300012
+    second: LeftFoot_Mesh
+  - first:
+      33: 3300014
+    second: LeftForeArm_Mesh
+  - first:
+      33: 3300016
+    second: LeftHand_Mesh
+  - first:
+      33: 3300018
+    second: LeftHandIndex1_Mesh
+  - first:
+      33: 3300020
+    second: LeftHandIndex2_Mesh
+  - first:
+      33: 3300022
+    second: LeftHandIndex3_Mesh
+  - first:
+      33: 3300024
+    second: LeftHandMiddle1_Mesh
+  - first:
+      33: 3300026
+    second: LeftHandMiddle2_Mesh
+  - first:
+      33: 3300028
+    second: LeftHandMiddle3_Mesh
+  - first:
+      33: 3300030
+    second: LeftHandPinky1_Mesh
+  - first:
+      33: 3300032
+    second: LeftHandPinky2_Mesh
+  - first:
+      33: 3300034
+    second: LeftHandPinky3_Mesh
+  - first:
+      33: 3300036
+    second: LeftHandRing1_Mesh
+  - first:
+      33: 3300038
+    second: LeftHandRing2_Mesh
+  - first:
+      33: 3300040
+    second: LeftHandRing3_Mesh
+  - first:
+      33: 3300042
+    second: LeftHandThumb1_Mesh
+  - first:
+      33: 3300044
+    second: LeftHandThumb2_Mesh
+  - first:
+      33: 3300046
+    second: LeftHandThumb3_Mesh
+  - first:
+      33: 3300048
+    second: LeftLeg1_Mesh
+  - first:
+      33: 3300050
+    second: LeftLeg2_Mesh
+  - first:
+      33: 3300052
+    second: LeftShoulder_Mesh
+  - first:
+      33: 3300054
+    second: LeftToe_Mesh
+  - first:
+      33: 3300056
+    second: LeftUpLeg_Mesh
+  - first:
+      33: 3300058
+    second: Neck_Mesh
+  - first:
+      33: 3300060
+    second: RightArm_Mesh
+  - first:
+      33: 3300062
+    second: RightFoot_Mesh
+  - first:
+      33: 3300064
+    second: RightForeArm_Mesh
+  - first:
+      33: 3300066
+    second: RightHand_Mesh
+  - first:
+      33: 3300068
+    second: RightHandIndex1_Mesh
+  - first:
+      33: 3300070
+    second: RightHandIndex2_Mesh
+  - first:
+      33: 3300072
+    second: RightHandIndex3_Mesh
+  - first:
+      33: 3300074
+    second: RightHandMiddle1_Mesh
+  - first:
+      33: 3300076
+    second: RightHandMiddle2_Mesh
+  - first:
+      33: 3300078
+    second: RightHandMiddle3_Mesh
+  - first:
+      33: 3300080
+    second: RightHandPinky1_Mesh
+  - first:
+      33: 3300082
+    second: RightHandPinky2_Mesh
+  - first:
+      33: 3300084
+    second: RightHandPinky3_Mesh
+  - first:
+      33: 3300086
+    second: RightHandRing1_Mesh
+  - first:
+      33: 3300088
+    second: RightHandRing2_Mesh
+  - first:
+      33: 3300090
+    second: RightHandRing3_Mesh
+  - first:
+      33: 3300092
+    second: RightHandThumb1_Mesh
+  - first:
+      33: 3300094
+    second: RightHandThumb2_Mesh
+  - first:
+      33: 3300096
+    second: RightHandThumb3_Mesh
+  - first:
+      33: 3300098
+    second: RightLeg1_Mesh
+  - first:
+      33: 3300100
+    second: RightLeg2_Mesh
+  - first:
+      33: 3300102
+    second: RightShoulder_Mesh
+  - first:
+      33: 3300104
+    second: RightToe_Mesh
+  - first:
+      33: 3300106
+    second: RightUpLeg_Mesh
+  - first:
+      33: 3300108
+    second: Spine1_Mesh
+  - first:
+      33: 3300110
+    second: Spine2_Mesh
+  - first:
+      43: 4300000
+    second: Head1_Mesh
+  - first:
+      43: 4300002
+    second: Head3_Mesh
+  - first:
+      43: 4300004
+    second: Head2_Mesh
+  - first:
+      43: 4300006
+    second: Neck_Mesh
+  - first:
+      43: 4300008
+    second: LeftHandThumb3_Mesh
+  - first:
+      43: 4300010
+    second: LeftHandThumb2_Mesh
+  - first:
+      43: 4300012
+    second: LeftHandThumb1_Mesh
+  - first:
+      43: 4300014
+    second: LeftHandIndex3_Mesh
+  - first:
+      43: 4300016
+    second: LeftHandIndex2_Mesh
+  - first:
+      43: 4300018
+    second: LeftHandIndex1_Mesh
+  - first:
+      43: 4300020
+    second: LeftHandMiddle3_Mesh
+  - first:
+      43: 4300022
+    second: LeftHandMiddle2_Mesh
+  - first:
+      43: 4300024
+    second: LeftHandMiddle1_Mesh
+  - first:
+      43: 4300026
+    second: LeftHandRing3_Mesh
+  - first:
+      43: 4300028
+    second: LeftHandRing2_Mesh
+  - first:
+      43: 4300030
+    second: LeftHandRing1_Mesh
+  - first:
+      43: 4300032
+    second: LeftHandPinky3_Mesh
+  - first:
+      43: 4300034
+    second: LeftHandPinky2_Mesh
+  - first:
+      43: 4300036
+    second: LeftHandPinky1_Mesh
+  - first:
+      43: 4300038
+    second: LeftHand_Mesh
+  - first:
+      43: 4300040
+    second: LeftForeArm_Mesh
+  - first:
+      43: 4300042
+    second: LeftArm_Mesh
+  - first:
+      43: 4300044
+    second: LeftShoulder_Mesh
+  - first:
+      43: 4300046
+    second: RightHandThumb3_Mesh
+  - first:
+      43: 4300048
+    second: RightHandThumb2_Mesh
+  - first:
+      43: 4300050
+    second: RightHandThumb1_Mesh
+  - first:
+      43: 4300052
+    second: RightHandIndex3_Mesh
+  - first:
+      43: 4300054
+    second: RightHandIndex2_Mesh
+  - first:
+      43: 4300056
+    second: RightHandIndex1_Mesh
+  - first:
+      43: 4300058
+    second: RightHandMiddle3_Mesh
+  - first:
+      43: 4300060
+    second: RightHandMiddle2_Mesh
+  - first:
+      43: 4300062
+    second: RightHandMiddle1_Mesh
+  - first:
+      43: 4300064
+    second: RightHandRing3_Mesh
+  - first:
+      43: 4300066
+    second: RightHandRing2_Mesh
+  - first:
+      43: 4300068
+    second: RightHandRing1_Mesh
+  - first:
+      43: 4300070
+    second: RightHandPinky3_Mesh
+  - first:
+      43: 4300072
+    second: RightHandPinky2_Mesh
+  - first:
+      43: 4300074
+    second: RightHandPinky1_Mesh
+  - first:
+      43: 4300076
+    second: RightHand_Mesh
+  - first:
+      43: 4300078
+    second: RightForeArm_Mesh
+  - first:
+      43: 4300080
+    second: RightArm_Mesh
+  - first:
+      43: 4300082
+    second: RightShoulder_Mesh
+  - first:
+      43: 4300084
+    second: Spine2_Mesh
+  - first:
+      43: 4300086
+    second: Spine1_Mesh
+  - first:
+      43: 4300088
+    second: LeftToe_Mesh
+  - first:
+      43: 4300090
+    second: LeftFoot_Mesh
+  - first:
+      43: 4300092
+    second: LeftLeg2_Mesh
+  - first:
+      43: 4300094
+    second: LeftLeg1_Mesh
+  - first:
+      43: 4300096
+    second: LeftUpLeg_Mesh
+  - first:
+      43: 4300098
+    second: RightToe_Mesh
+  - first:
+      43: 4300100
+    second: RightFoot_Mesh
+  - first:
+      43: 4300102
+    second: RightLeg2_Mesh
+  - first:
+      43: 4300104
+    second: RightLeg1_Mesh
+  - first:
+      43: 4300106
+    second: RightUpLeg_Mesh
+  - first:
+      43: 4300108
+    second: Hips1_Mesh
+  - first:
+      43: 4300110
+    second: Hips2_Mesh
+  - first:
+      74: 7400000
+    second: Cha_GrabMedium
+  - first:
+      74: 7400002
+    second: GrabMediumNothing
+  - first:
+      95: 9500000
+    second: //RootNode
+  externalObjects: {}
+  materials:
+    materialImportMode: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 0
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    removeConstantScaleCurves: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: "Copied Avatar Rig Configuration mis-match. Bone length in
+      copied configuration does not match position in animation file:\n\t'LeftUpLeg'
+      : position error = 121.258049 mm\n\t'LeftLeg' : position error = 446.058441
+      mm\n\t'LeftFoot' : position error = 349.483795 mm\n\t'LeftToe' : position error
+      = 177.537994 mm\n\t'RightUpLeg' : position error = 121.257782 mm\n\t'RightLeg'
+      : position error = 446.059357 mm\n\t'RightFoot' : position error = 349.483887
+      mm\n\t'RightToe' : position error = 177.537842 mm\n"
+    animationImportErrors: 
+    animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
+      might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'Spine3' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n"
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 3
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Cha_GrabMedium
+      takeName: Take 001
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 70
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Root
+        weight: 1
+      - path: Root/Hips
+        weight: 1
+      - path: Root/Hips/LeftUpLeg
+        weight: 1
+      - path: Root/Hips/LeftUpLeg/LeftLeg
+        weight: 1
+      - path: Root/Hips/LeftUpLeg/LeftLeg/LeftFoot
+        weight: 1
+      - path: Root/Hips/LeftUpLeg/LeftLeg/LeftFoot/LeftToe
+        weight: 1
+      - path: Root/Hips/LeftUpLeg/LeftLeg/LeftFoot/LeftToe/LeftToeEnd
+        weight: 1
+      - path: Root/Hips/RightUpLeg
+        weight: 1
+      - path: Root/Hips/RightUpLeg/RightLeg
+        weight: 1
+      - path: Root/Hips/RightUpLeg/RightLeg/RightFoot
+        weight: 1
+      - path: Root/Hips/RightUpLeg/RightLeg/RightFoot/RightToe
+        weight: 1
+      - path: Root/Hips/RightUpLeg/RightLeg/RightFoot/RightToe/RightToeEnd
+        weight: 1
+      - path: Root/Hips/Spine1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandIndex1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandIndex1/LeftHandIndex2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandIndex1/LeftHandIndex2/LeftHandIndex3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandIndex1/LeftHandIndex2/LeftHandIndex3/LeftHandIndex4
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandMiddle1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandMiddle1/LeftHandMiddle2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandMiddle1/LeftHandMiddle2/LeftHandMiddle3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandMiddle1/LeftHandMiddle2/LeftHandMiddle3/LeftHandMiddle4
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandPinky1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandPinky1/LeftHandPinky2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandPinky1/LeftHandPinky2/LeftHandPinky3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandPinky1/LeftHandPinky2/LeftHandPinky3/LeftHandPinky4
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandRing1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandRing1/LeftHandRing2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandRing1/LeftHandRing2/LeftHandRing3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandRing1/LeftHandRing2/LeftHandRing3/LeftHandRing4
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandThumb1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandThumb1/LeftHandThumb2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandThumb1/LeftHandThumb2/LeftHandThumb3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandThumb1/LeftHandThumb2/LeftHandThumb3/LeftHandThumb4
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/Neck
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/Neck/Head
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/Neck/Head/HeadEnd
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandIndex1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandIndex1/RightHandIndex2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandIndex1/RightHandIndex2/RightHandIndex3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandIndex1/RightHandIndex2/RightHandIndex3/RightHandIndex4
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandMiddle1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandMiddle1/RightHandMiddle2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandMiddle1/RightHandMiddle2/RightHandMiddle3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandMiddle1/RightHandMiddle2/RightHandMiddle3/RightHandMiddle4
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandPinky1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandPinky1/RightHandPinky2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandPinky1/RightHandPinky2/RightHandPinky3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandPinky1/RightHandPinky2/RightHandPinky3/RightHandPinky4
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandRing1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandRing1/RightHandRing2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandRing1/RightHandRing2/RightHandRing3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandRing1/RightHandRing2/RightHandRing3/RightHandRing4
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandThumb1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandThumb1/RightHandThumb2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandThumb1/RightHandThumb2/RightHandThumb3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandThumb1/RightHandThumb2/RightHandThumb3/RightHandThumb4
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: GrabMediumNothing
+      takeName: Take 001
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 70
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 1
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0.51937985
+        functionName: StartInteraction
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.94056845
+        functionName: RetrieveControlToCharacter
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Root
+        weight: 1
+      - path: Root/Hips
+        weight: 1
+      - path: Root/Hips/Hips1_Mesh
+        weight: 0
+      - path: Root/Hips/Hips2_Mesh
+        weight: 0
+      - path: Root/Hips/LeftUpLeg
+        weight: 1
+      - path: Root/Hips/LeftUpLeg/LeftLeg
+        weight: 1
+      - path: Root/Hips/LeftUpLeg/LeftLeg/LeftFoot
+        weight: 1
+      - path: Root/Hips/LeftUpLeg/LeftLeg/LeftFoot/LeftFoot_Mesh
+        weight: 0
+      - path: Root/Hips/LeftUpLeg/LeftLeg/LeftFoot/LeftToe
+        weight: 1
+      - path: Root/Hips/LeftUpLeg/LeftLeg/LeftFoot/LeftToe/LeftToe_Mesh
+        weight: 0
+      - path: Root/Hips/LeftUpLeg/LeftLeg/LeftFoot/LeftToe/LeftToeEnd
+        weight: 0
+      - path: Root/Hips/LeftUpLeg/LeftLeg/LeftLeg1_Mesh
+        weight: 0
+      - path: Root/Hips/LeftUpLeg/LeftLeg/LeftLeg2_Mesh
+        weight: 0
+      - path: Root/Hips/LeftUpLeg/LeftUpLeg_Mesh
+        weight: 0
+      - path: Root/Hips/RightUpLeg
+        weight: 1
+      - path: Root/Hips/RightUpLeg/RightLeg
+        weight: 1
+      - path: Root/Hips/RightUpLeg/RightLeg/RightFoot
+        weight: 1
+      - path: Root/Hips/RightUpLeg/RightLeg/RightFoot/RightFoot_Mesh
+        weight: 0
+      - path: Root/Hips/RightUpLeg/RightLeg/RightFoot/RightToe
+        weight: 1
+      - path: Root/Hips/RightUpLeg/RightLeg/RightFoot/RightToe/RightToe_Mesh
+        weight: 0
+      - path: Root/Hips/RightUpLeg/RightLeg/RightFoot/RightToe/RightToeEnd
+        weight: 0
+      - path: Root/Hips/RightUpLeg/RightLeg/RightLeg1_Mesh
+        weight: 0
+      - path: Root/Hips/RightUpLeg/RightLeg/RightLeg2_Mesh
+        weight: 0
+      - path: Root/Hips/RightUpLeg/RightUpLeg_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine1_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine2_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftArm_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftForeArm_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHand_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandIndex1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandIndex1/LeftHandIndex1_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandIndex1/LeftHandIndex2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandIndex1/LeftHandIndex2/LeftHandIndex2_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandIndex1/LeftHandIndex2/LeftHandIndex3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandIndex1/LeftHandIndex2/LeftHandIndex3/LeftHandIndex3_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandIndex1/LeftHandIndex2/LeftHandIndex3/LeftHandIndex4
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandMiddle1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandMiddle1/LeftHandMiddle1_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandMiddle1/LeftHandMiddle2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandMiddle1/LeftHandMiddle2/LeftHandMiddle2_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandMiddle1/LeftHandMiddle2/LeftHandMiddle3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandMiddle1/LeftHandMiddle2/LeftHandMiddle3/LeftHandMiddle3_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandMiddle1/LeftHandMiddle2/LeftHandMiddle3/LeftHandMiddle4
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandPinky1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandPinky1/LeftHandPinky1_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandPinky1/LeftHandPinky2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandPinky1/LeftHandPinky2/LeftHandPinky2_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandPinky1/LeftHandPinky2/LeftHandPinky3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandPinky1/LeftHandPinky2/LeftHandPinky3/LeftHandPinky3_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandPinky1/LeftHandPinky2/LeftHandPinky3/LeftHandPinky4
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandRing1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandRing1/LeftHandRing1_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandRing1/LeftHandRing2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandRing1/LeftHandRing2/LeftHandRing2_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandRing1/LeftHandRing2/LeftHandRing3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandRing1/LeftHandRing2/LeftHandRing3/LeftHandRing3_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandRing1/LeftHandRing2/LeftHandRing3/LeftHandRing4
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandThumb1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandThumb1/LeftHandThumb1_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandThumb1/LeftHandThumb2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandThumb1/LeftHandThumb2/LeftHandThumb2_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandThumb1/LeftHandThumb2/LeftHandThumb3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandThumb1/LeftHandThumb2/LeftHandThumb3/LeftHandThumb3_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftArm/LeftForeArm/LeftHand/LeftHandThumb1/LeftHandThumb2/LeftHandThumb3/LeftHandThumb4
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/LeftShoulder/LeftShoulder_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/Neck
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/Neck/Head
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/Neck/Head/Head1_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/Neck/Head/Head2_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/Neck/Head/Head3_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/Neck/Head/HeadEnd
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/Neck/Neck_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightArm_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightForeArm_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHand_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandIndex1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandIndex1/RightHandIndex1_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandIndex1/RightHandIndex2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandIndex1/RightHandIndex2/RightHandIndex2_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandIndex1/RightHandIndex2/RightHandIndex3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandIndex1/RightHandIndex2/RightHandIndex3/RightHandIndex3_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandIndex1/RightHandIndex2/RightHandIndex3/RightHandIndex4
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandMiddle1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandMiddle1/RightHandMiddle1_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandMiddle1/RightHandMiddle2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandMiddle1/RightHandMiddle2/RightHandMiddle2_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandMiddle1/RightHandMiddle2/RightHandMiddle3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandMiddle1/RightHandMiddle2/RightHandMiddle3/RightHandMiddle3_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandMiddle1/RightHandMiddle2/RightHandMiddle3/RightHandMiddle4
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandPinky1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandPinky1/RightHandPinky1_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandPinky1/RightHandPinky2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandPinky1/RightHandPinky2/RightHandPinky2_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandPinky1/RightHandPinky2/RightHandPinky3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandPinky1/RightHandPinky2/RightHandPinky3/RightHandPinky3_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandPinky1/RightHandPinky2/RightHandPinky3/RightHandPinky4
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandRing1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandRing1/RightHandRing1_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandRing1/RightHandRing2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandRing1/RightHandRing2/RightHandRing2_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandRing1/RightHandRing2/RightHandRing3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandRing1/RightHandRing2/RightHandRing3/RightHandRing3_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandRing1/RightHandRing2/RightHandRing3/RightHandRing4
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandThumb1
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandThumb1/RightHandThumb1_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandThumb1/RightHandThumb2
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandThumb1/RightHandThumb2/RightHandThumb2_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandThumb1/RightHandThumb2/RightHandThumb3
+        weight: 1
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandThumb1/RightHandThumb2/RightHandThumb3/RightHandThumb3_Mesh
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightArm/RightForeArm/RightHand/RightHandThumb1/RightHandThumb2/RightHandThumb3/RightHandThumb4
+        weight: 0
+      - path: Root/Hips/Spine1/Spine2/Spine3/RightShoulder/RightShoulder_Mesh
+        weight: 0
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importPhysicalCameras: 0
+    importVisibility: 0
+    importBlendShapes: 1
+    importCameras: 0
+    importLights: 0
+    nodeNameCollisionStrategy: 0
+    fileIdsGeneration: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    optimizeBones: 1
+    meshOptimizationFlags: -1
+    indexFormat: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 0
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    strictVertexDataChecks: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 4
+    normalCalculationMode: 0
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 1
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 3
+  humanoidOversampling: 1
+  avatarSetup: 1
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 0
+  importBlendShapeDeformPercent: 0
+  remapMaterialsIfMaterialImportModeIsNone: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

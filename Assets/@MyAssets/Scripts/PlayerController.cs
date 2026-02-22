@@ -25,8 +25,11 @@ public class PlayerController : MonoBehaviour
     bool isSprinting; // Variable real (Tecla + Dirección correcta)
     bool jumpRequest;
 
+    public bool movementLocked;
+
     PlayerInput playerInput;
     InputAction sprintAction;
+
 
     void Awake()
     {
@@ -41,21 +44,28 @@ public class PlayerController : MonoBehaviour
         if (animator == null) animator = GetComponentInChildren<Animator>();
     }
 
-    public void OnMove(InputValue v) => move = v.Get<Vector2>();
-    public void OnLook(InputValue v) => look = v.Get<Vector2>();
+    public void OnMove(InputValue v)
+    {
+        if (movementLocked) { move = Vector2.zero; return; }
+        move = v.Get<Vector2>();
+    }
+
+    public void OnLook(InputValue v)
+    {
+        if (movementLocked) { look = Vector2.zero; return; } // si quieres que tampoco rote
+        look = v.Get<Vector2>();
+    }
+
     public void OnJump(InputValue v)
     {
+        if (movementLocked) return;
         if (v.isPressed) jumpRequest = true;
     }
 
     void Update()
     {
-        // Calculamos aquí si realmente estamos corriendo para usarlo en todo el script
         sprintInput = sprintAction.IsPressed();
 
-        // <--- CAMBIO IMPORTANTE: Lógica de restricción ---
-        // Solo corremos si pulsamos Shift Y nos movemos hacia adelante (move.y > 0)
-        // Esto cubre Adelante (0,1) y Diagonales delanteras (0.7, 0.7)
         if (sprintInput && move.y > 0.1f)
         {
             isSprinting = true;
@@ -64,21 +74,37 @@ public class PlayerController : MonoBehaviour
         {
             isSprinting = false;
         }
-        // ------------------------------------------------
 
         UpdateAnimation();
     }
 
     void FixedUpdate()
     {
-        Rotate();
-        Move();
-        Jump();
+        if (!movementLocked)
+        {
+            Rotate();
+            Move();
+            Jump();
+        }
+        else
+        {
+            // Nos quedamos quietos
+            rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
+        }
+
         jumpRequest = false;
     }
 
     void UpdateAnimation()
     {
+        if (movementLocked)
+        {
+            animator.SetFloat("InputX", 0f, 0.1f, Time.deltaTime);
+            animator.SetFloat("InputY", 0f, 0.1f, Time.deltaTime);
+            animator.SetFloat("Speed", 0f);
+            return;
+        }
+
         if (animator == null) return;
 
         // --- 1. Calcular Intensidad ---

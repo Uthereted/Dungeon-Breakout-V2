@@ -20,17 +20,20 @@ public class EnemyController : MonoBehaviour
     public float maxWaitTime = 3f;
 
     [Header("Animación (simple)")]
-    public float animDamp = 0.12f;      // suaviza cambios de Speed
-    public float attackLockTime = 0.7f; // tiempo bloqueado durante ataque (ajústalo al clip)
+    public float animDamp = 0.12f;
+    public float attackLockTime = 0.7f;
+    public float hitDelay = 0.35f; // ajústalo a ojo
 
     private NavMeshAgent agent;
     private float waitTimer;
     private float attackTimer;
     private bool isChasing;
-
     private float attackLockTimer;
 
-    // hashes para evitar typos
+
+    [Header("DEMO Damage")]
+    public HealthControllerDEMO playerHealth;
+
     int SpeedHash = Animator.StringToHash("Speed");
     int IsChasingHash = Animator.StringToHash("IsChasing");
     int AttackHash = Animator.StringToHash("Attack");
@@ -39,12 +42,32 @@ public class EnemyController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         agent.speed = patrolSpeed;
+
+        if (animator == null) animator = GetComponentInChildren<Animator>();
+
+        // intenta auto-encontrar la vida del player
+        if (playerHealth == null && player != null)
+            playerHealth = player.GetComponent<HealthControllerDEMO>();
+
         GoToRandomPoint();
     }
 
     void Update()
     {
+        if (playerHealth != null && playerHealth.IsDead)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+            isChasing = false;
+            UpdateAnimations();
+            return;
+        }
+
         if (player == null) return;
+
+        // por si lo asignas tarde
+        if (playerHealth == null)
+            playerHealth = player.GetComponent<HealthControllerDEMO>();
 
         float dist = Vector3.Distance(transform.position, player.position);
         attackTimer -= Time.deltaTime;
@@ -64,7 +87,6 @@ public class EnemyController : MonoBehaviour
             GoToRandomPoint();
         }
 
-        // Si está “bloqueado” por ataque, no muevas
         if (attackLockTimer > 0f)
         {
             agent.isStopped = true;
@@ -88,6 +110,8 @@ public class EnemyController : MonoBehaviour
                         animator.SetTrigger(AttackHash);
                         attackTimer = attackCooldown;
                         attackLockTimer = attackLockTime;
+
+                        Invoke(nameof(DealDamageToPlayer), hitDelay);
                     }
                 }
                 else
@@ -136,13 +160,36 @@ public class EnemyController : MonoBehaviour
 
         animator.SetBool(IsChasingHash, isChasing);
 
-        // Speed 0..1 (patrulla ~0.44, chase ~1 si chaseSpeed=4.5 y patrolSpeed=2)
         float speed01 = (chaseSpeed <= 0.01f) ? 0f : Mathf.Clamp01(agent.velocity.magnitude / chaseSpeed);
 
         if (agent.isStopped || agent.velocity.magnitude < 0.05f || attackLockTimer > 0f)
             speed01 = 0f;
 
         animator.SetFloat(SpeedHash, speed01, animDamp, Time.deltaTime);
+    }
+
+    public void DealDamageToPlayer()
+    {
+        Debug.Log("DealDamageToPlayer() called");
+
+        if (playerHealth == null || playerHealth.IsDead) return;
+
+        if (playerHealth == null)
+        {
+            Debug.LogWarning("playerHealth is NULL (pon HealthControllerDEMO en el Player)");
+            return;
+        }
+
+        float dist = Vector3.Distance(transform.position, player.position);
+        if (dist <= attackRange + 0.2f)
+        {
+            Debug.Log("HIT!");
+            playerHealth.TakeHit(1);
+        }
+        else
+        {
+            Debug.Log("No hit (fuera de rango)");
+        }
     }
 
     void OnDrawGizmosSelected()
