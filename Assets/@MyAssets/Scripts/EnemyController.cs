@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
@@ -8,7 +8,7 @@ public class EnemyController : MonoBehaviour
     public Transform player;
     public Animator animator;
 
-    [Header("Configuraci�n")]
+    [Header("Configuración")]
     public float patrolSpeed = 2f;
     public float chaseSpeed = 4.5f;
     public float patrolRadius = 10f;
@@ -19,20 +19,20 @@ public class EnemyController : MonoBehaviour
     public float minWaitTime = 1f;
     public float maxWaitTime = 3f;
 
-    [Header("Animaci�n (simple)")]
+    [Header("Animación")]
     public float animDamp = 0.12f;
     public float attackLockTime = 0.7f;
-    public float hitDelay = 0.35f; // aj�stalo a ojo
+    public float hitDelay = 0.35f;
+
+    [Header("DEMO Damage")]
+    public HealthControllerDEMO playerHealth;
 
     private NavMeshAgent agent;
     private float waitTimer;
     private float attackTimer;
     private bool isChasing;
     private float attackLockTimer;
-
-
-    [Header("DEMO Damage")]
-    public HealthControllerDEMO playerHealth;
+    private EnemyHealthDEMO health;
 
     int SpeedHash = Animator.StringToHash("Speed");
     int IsChasingHash = Animator.StringToHash("IsChasing");
@@ -42,10 +42,9 @@ public class EnemyController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         agent.speed = patrolSpeed;
+        health = GetComponent<EnemyHealthDEMO>();
 
         if (animator == null) animator = GetComponentInChildren<Animator>();
-
-        // intenta auto-encontrar la vida del player
         if (playerHealth == null && player != null)
             playerHealth = player.GetComponent<HealthControllerDEMO>();
 
@@ -54,6 +53,16 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
+        // ── Muerto: no hacer nada ──
+        if (health != null && health.IsDead)
+        {
+            agent.isStopped = true;
+            agent.ResetPath();
+            CancelInvoke();
+            return;
+        }
+
+        // ── Player muerto: parar ──
         if (playerHealth != null && playerHealth.IsDead)
         {
             agent.isStopped = true;
@@ -65,7 +74,6 @@ public class EnemyController : MonoBehaviour
 
         if (player == null) return;
 
-        // por si lo asignas tarde
         if (playerHealth == null)
             playerHealth = player.GetComponent<HealthControllerDEMO>();
 
@@ -73,6 +81,7 @@ public class EnemyController : MonoBehaviour
         attackTimer -= Time.deltaTime;
         if (attackLockTimer > 0f) attackLockTimer -= Time.deltaTime;
 
+        // ── Detección / pérdida ──
         if (!isChasing && dist < detectionRange)
         {
             isChasing = true;
@@ -87,6 +96,7 @@ public class EnemyController : MonoBehaviour
             GoToRandomPoint();
         }
 
+        // ── Attack lock (esperando a que termine la animación) ──
         if (attackLockTimer > 0f)
         {
             agent.isStopped = true;
@@ -105,12 +115,18 @@ public class EnemyController : MonoBehaviour
                     agent.ResetPath();
                     LookAtPlayer();
 
+                    // ── No ataca si está stuneado ──
+                    if (health != null && health.IsStunned)
+                    {
+                        UpdateAnimations();
+                        return;
+                    }
+
                     if (attackTimer <= 0f)
                     {
                         animator.SetTrigger(AttackHash);
                         attackTimer = attackCooldown;
                         attackLockTimer = attackLockTime;
-
                         Invoke(nameof(DealDamageToPlayer), hitDelay);
                     }
                 }
@@ -151,7 +167,11 @@ public class EnemyController : MonoBehaviour
         Vector3 dir = (player.position - transform.position);
         dir.y = 0;
         if (dir.sqrMagnitude > 0.001f)
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10f * Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                Quaternion.LookRotation(dir),
+                10f * Time.deltaTime
+            );
     }
 
     void UpdateAnimations()
@@ -160,7 +180,9 @@ public class EnemyController : MonoBehaviour
 
         animator.SetBool(IsChasingHash, isChasing);
 
-        float speed01 = (chaseSpeed <= 0.01f) ? 0f : Mathf.Clamp01(agent.velocity.magnitude / chaseSpeed);
+        float speed01 = (chaseSpeed <= 0.01f)
+            ? 0f
+            : Mathf.Clamp01(agent.velocity.magnitude / chaseSpeed);
 
         if (agent.isStopped || agent.velocity.magnitude < 0.05f || attackLockTimer > 0f)
             speed01 = 0f;
@@ -170,25 +192,14 @@ public class EnemyController : MonoBehaviour
 
     public void DealDamageToPlayer()
     {
-        Debug.Log("DealDamageToPlayer() called");
-
+        // No pegar si estamos muertos o stuneados
+        if (health != null && (health.IsDead || health.IsStunned)) return;
         if (playerHealth == null || playerHealth.IsDead) return;
-
-        if (playerHealth == null)
-        {
-            Debug.LogWarning("playerHealth is NULL (pon HealthControllerDEMO en el Player)");
-            return;
-        }
 
         float dist = Vector3.Distance(transform.position, player.position);
         if (dist <= attackRange + 0.2f)
         {
-            Debug.Log("HIT!");
             playerHealth.TakeHit(1);
-        }
-        else
-        {
-            Debug.Log("No hit (fuera de rango)");
         }
     }
 

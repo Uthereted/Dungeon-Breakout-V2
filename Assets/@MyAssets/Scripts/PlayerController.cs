@@ -99,9 +99,15 @@ public class PlayerController : MonoBehaviour
     {
         if (movementLocked)
         {
+            if (animator == null) return;
+
             animator.SetFloat("InputX", 0f, 0.1f, Time.deltaTime);
             animator.SetFloat("InputY", 0f, 0.1f, Time.deltaTime);
             animator.SetFloat("Speed", 0f);
+
+            // no haga "Turn" mientras está atacando/recogiendo
+            animator.SetFloat("Turn", 0f, 0.1f, Time.deltaTime);
+
             return;
         }
 
