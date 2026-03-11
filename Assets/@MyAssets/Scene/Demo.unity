@@ -5910,7 +5910,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca532a054e9d2884284509a93420e9ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  corridorPrefab: {fileID: 5209803884109455622, guid: 378d947f19411bd42a4dc3b7bff0ac18, type: 3}
+  corridorPrefab: {fileID: 6403654532480323807, guid: 2629065933f5ea14f86552daa2433c48, type: 3}
   spawnPoint: {fileID: 323770219}
 --- !u!4 &299290724
 Transform:
