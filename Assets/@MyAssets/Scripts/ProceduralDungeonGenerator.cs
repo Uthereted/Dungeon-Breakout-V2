@@ -308,34 +308,6 @@ public class ProceduralDungeonGenerator : MonoBehaviour
         return arr;
     }
 
-#if UNITY_EDITOR
-    void OnDrawGizmos()
-    {
-        if (!Application.isPlaying) return;
-
-        foreach (var go in FindObjectsOfType<DungeonPiece>())
-        {
-            Transform t = go.transform.Find("BoundsCheck");
-            if (t == null) continue;
-
-            var bc = t.GetComponent<BoxCollider>();
-            if (bc == null) continue;
-
-            Gizmos.color = new Color(0f, 1f, 0.5f, 0.15f);
-            Gizmos.matrix = Matrix4x4.TRS(
-                t.TransformPoint(bc.center),
-                go.transform.rotation,
-                Vector3.Scale(bc.size, t.lossyScale)
-            );
-            Gizmos.DrawCube(Vector3.zero, Vector3.one);
-
-            Gizmos.color = new Color(0f, 1f, 0.5f, 0.6f);
-            Gizmos.DrawWireCube(Vector3.zero, Vector3.one);
-        }
-
-        Gizmos.matrix = Matrix4x4.identity;
-    }
-#endif
 
     static GameObject GetRandomPrefab(GameObject[] arr)
         => arr[Random.Range(0, arr.Length)];

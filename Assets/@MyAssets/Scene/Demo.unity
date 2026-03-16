@@ -23623,14 +23623,14 @@ MonoBehaviour:
   - {fileID: 6403654532480323807, guid: 2629065933f5ea14f86552daa2433c48, type: 3}
   - {fileID: 416967313718504004, guid: 30dcff3d44cc52e4aadb82269b038676, type: 3}
   startPoint: {fileID: 323770219}
-  maxPieces: 100
+  maxPieces: 30
   seed: 0
   roomChance: 0.4
   dungeonLayer:
     serializedVersion: 2
     m_Bits: 256
-  maxPlacementAttempts: 6
-  overlapShrink: 0.2
+  maxPlacementAttempts: 4
+  overlapShrink: 0.9
   mainRoom: {fileID: 836182957}
 --- !u!4 &1048137472
 Transform:
