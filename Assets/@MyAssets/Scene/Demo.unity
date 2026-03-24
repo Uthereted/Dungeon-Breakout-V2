@@ -7061,6 +7061,7 @@ MonoBehaviour:
   attackLockTime: 1.8
   hitDelay: 1
   playerHealth: {fileID: 1069017161}
+  patrolArea: {fileID: 0}
 --- !u!195 &357036882
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -23634,6 +23635,11 @@ MonoBehaviour:
   mainRoom: {fileID: 836182957}
   NavRoot: {fileID: 33235458}
   navSurface: {fileID: 33235457}
+  enemyPrefabs:
+  - {fileID: 357036878}
+  minEnemiesPerPiece: 1
+  maxEnemiesPerPiece: 2
+  enemySpawnChance: 0.7
 --- !u!4 &1048137472
 Transform:
   m_ObjectHideFlags: 0
@@ -24074,7 +24080,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ef80b56bbcc66349a7c82ce5dbacfbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHits: 99
+  maxHits: 2
   animator: {fileID: 0}
   dieTrigger: Die
   groundOffset: 0.02

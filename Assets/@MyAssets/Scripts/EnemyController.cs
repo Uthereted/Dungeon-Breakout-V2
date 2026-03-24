@@ -38,6 +38,8 @@ public class EnemyController : MonoBehaviour
     int IsChasingHash = Animator.StringToHash("IsChasing");
     int AttackHash = Animator.StringToHash("Attack");
 
+    public BoxCollider patrolArea;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -170,13 +172,31 @@ public class EnemyController : MonoBehaviour
 
     void GoToRandomPoint()
     {
-        waitTimer = Random.Range(minWaitTime, maxWaitTime);
-        Vector3 randomDir = Random.insideUnitSphere * patrolRadius + transform.position;
-        randomDir.y = 0f;
+        if (agent == null || !agent.enabled || !agent.isOnNavMesh) return;
 
-        NavMeshHit hit;
-        NavMesh.SamplePosition(randomDir, out hit, patrolRadius, NavMesh.AllAreas);
-        agent.SetDestination(hit.position);
+        waitTimer = Random.Range(minWaitTime, maxWaitTime);
+
+        Vector3 targetPoint;
+
+        if (patrolArea != null)
+        {
+            Bounds b = patrolArea.bounds;
+            targetPoint = new Vector3(
+                Random.Range(b.min.x, b.max.x),
+                transform.position.y,
+                Random.Range(b.min.z, b.max.z)
+            );
+        }
+        else
+        {
+            targetPoint = Random.insideUnitSphere * patrolRadius + transform.position;
+            targetPoint.y = transform.position.y;
+        }
+
+        if (NavMesh.SamplePosition(targetPoint, out NavMeshHit hit, 3f, NavMesh.AllAreas))
+        {
+            agent.SetDestination(hit.position);
+        }
     }
 
     void LookAtPlayer()

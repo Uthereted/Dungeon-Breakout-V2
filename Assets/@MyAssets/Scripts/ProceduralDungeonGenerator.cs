@@ -37,6 +37,14 @@ public class ProceduralDungeonGenerator : MonoBehaviour
 
     private int placedCount = 0;
 
+    [Header("Enemigos")]
+    public GameObject[] enemyPrefabs;
+    public int minEnemiesPerPiece = 1;
+    public int maxEnemiesPerPiece = 2;
+    [Range(0f, 1f)] public float enemySpawnChance = 0.7f;
+    private readonly List<EnemySetup> enemyRooms = new List<EnemySetup>();
+
+
     // ---------------------------------------------------------------
     void Awake()
     {
@@ -123,14 +131,16 @@ public class ProceduralDungeonGenerator : MonoBehaviour
     }
     IEnumerator BakeNavNextFrame()
     {
-        yield return null; // espera 1 frame para que los Destroy se apliquen
+        yield return null; // Esperar un frame para asegurarse de que todas las piezas estén colocadas
 
         Physics.SyncTransforms();
 
         if (navSurface != null)
             navSurface.BuildNavMesh();
 
-        // Para el enemigo de la sala para no dar warning por NavMeshAgent sin NavMesh
+        SpawnEnemiesInPieces();
+
+        // Para el enemigo de la sala principal no dar warning por NavMeshAgent sin NavMesh
         EnemyController[] enemies = FindObjectsByType<EnemyController>(FindObjectsSortMode.None);
 
         foreach (EnemyController enemy in enemies)
@@ -138,6 +148,44 @@ public class ProceduralDungeonGenerator : MonoBehaviour
             NavMeshAgent enemyAgent = enemy.GetComponent<NavMeshAgent>();
             if (enemyAgent != null && !enemyAgent.enabled)
                 enemyAgent.enabled = true;
+        }
+    }
+
+    void SpawnEnemiesInPieces()
+    {
+        if (enemyPrefabs == null || enemyPrefabs.Length == 0) return;
+
+        foreach (EnemySetup room in enemyRooms)
+        {
+            if (room == null || room.spawnPoints == null || room.spawnPoints.Length == 0) continue;
+            if (Random.value > enemySpawnChance) continue;
+
+            int amount = Random.Range(minEnemiesPerPiece, maxEnemiesPerPiece + 1);
+            amount = Mathf.Min(amount, room.spawnPoints.Length);
+
+            int[] indices = ShuffledIndices(room.spawnPoints.Length);
+
+            for (int i = 0; i < amount; i++)
+            {
+                Transform spawnPoint = room.spawnPoints[indices[i]];
+                GameObject enemyPrefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Length)];
+
+                Vector3 spawnPos = spawnPoint.position;
+                Quaternion spawnRot = spawnPoint.rotation;
+
+                if (NavMesh.SamplePosition(spawnPos, out NavMeshHit hit, 2f, NavMesh.AllAreas))
+                {
+                    spawnPos = hit.position;
+                }
+
+                GameObject enemyObj = Instantiate(enemyPrefab, spawnPos, spawnRot, NavRoot);
+
+                EnemyController enemyController = enemyObj.GetComponent<EnemyController>();
+                if (enemyController != null)
+                {
+                    enemyController.patrolArea = room.patrolArea;
+                }
+            }
         }
     }
 
@@ -178,6 +226,14 @@ public class ProceduralDungeonGenerator : MonoBehaviour
             Physics.SyncTransforms();
 
             placedCount++;
+
+            EnemySetup roomSetup = obj.GetComponent<EnemySetup>();
+            if (roomSetup != null)
+            {
+                enemyRooms.Add(roomSetup);
+                Debug.Log($"[DungeonGen] Pieza con setup de enemigos detectada: {obj.name}");
+            }
+
             return obj;
         }
 
