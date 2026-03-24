@@ -48,7 +48,18 @@ public class EnemyController : MonoBehaviour
         if (playerHealth == null && player != null)
             playerHealth = player.GetComponent<HealthControllerDEMO>();
 
-        GoToRandomPoint();
+        if (!agent.isOnNavMesh)
+        {
+            if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 3f, NavMesh.AllAreas))
+            {
+                agent.Warp(hit.position);
+            }
+        }
+
+        if (agent.isOnNavMesh)
+        {
+            GoToRandomPoint();
+        }
     }
 
     void Update()
@@ -73,6 +84,12 @@ public class EnemyController : MonoBehaviour
         }
 
         if (player == null) return;
+
+        if (agent == null || !agent.enabled || !agent.isOnNavMesh)
+        {
+            UpdateAnimations();
+            return;
+        }
 
         if (playerHealth == null)
             playerHealth = player.GetComponent<HealthControllerDEMO>();
@@ -177,6 +194,13 @@ public class EnemyController : MonoBehaviour
     void UpdateAnimations()
     {
         if (animator == null) return;
+
+        if (agent == null || !agent.enabled || !agent.isOnNavMesh)
+        {
+            animator.SetBool(IsChasingHash, false);
+            animator.SetFloat(SpeedHash, 0f, animDamp, Time.deltaTime);
+            return;
+        }
 
         animator.SetBool(IsChasingHash, isChasing);
 

@@ -1,5 +1,8 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections;
+using Unity.AI.Navigation;
+using UnityEngine;
+using UnityEngine.AI;
 
 public class ProceduralDungeonGenerator : MonoBehaviour
 {
@@ -25,22 +28,32 @@ public class ProceduralDungeonGenerator : MonoBehaviour
     [Tooltip("La sala principal de la escena, se registra como obstáculo antes de generar")]
     public GameObject mainRoom;
 
+    [Header("NavMesh")]
+    public Transform NavRoot;
+    public NavMeshSurface navSurface;
+
     private readonly Queue<(ConnectorPoint connector, bool mustBeCorridor)> openConnectors
         = new Queue<(ConnectorPoint, bool)>();
 
     private int placedCount = 0;
 
     // ---------------------------------------------------------------
-    void Start()
+    void Awake()
     {
         if (seed != 0) Random.InitState(seed);
         Generate();
+        StartCoroutine(BakeNavNextFrame());
     }
 
     // ---------------------------------------------------------------
     void Generate()
     {
         int effectiveMax = maxPieces + 2;
+
+        if (mainRoom != null && NavRoot != null && mainRoom.transform.parent != NavRoot)
+        {
+            mainRoom.transform.SetParent(NavRoot, true);
+        }
 
         // Registrar la sala principal como obstáculo fijo
         if (mainRoom != null)
@@ -106,6 +119,26 @@ public class ProceduralDungeonGenerator : MonoBehaviour
             if (!connector.isConnected)
                 CloseWithRoom(connector, mustBeCorridor);
         }
+
+    }
+    IEnumerator BakeNavNextFrame()
+    {
+        yield return null; // espera 1 frame para que los Destroy se apliquen
+
+        Physics.SyncTransforms();
+
+        if (navSurface != null)
+            navSurface.BuildNavMesh();
+
+        // Para el enemigo de la sala para no dar warning por NavMeshAgent sin NavMesh
+        EnemyController[] enemies = FindObjectsByType<EnemyController>(FindObjectsSortMode.None);
+
+        foreach (EnemyController enemy in enemies)
+        {
+            NavMeshAgent enemyAgent = enemy.GetComponent<NavMeshAgent>();
+            if (enemyAgent != null && !enemyAgent.enabled)
+                enemyAgent.enabled = true;
+        }
     }
 
     // ---------------------------------------------------------------
@@ -116,7 +149,7 @@ public class ProceduralDungeonGenerator : MonoBehaviour
         for (int attempt = 0; attempt < Mathf.Min(maxPlacementAttempts, pool.Length); attempt++)
         {
             GameObject prefab = pool[indices[attempt]];
-            GameObject obj = Instantiate(prefab);
+            GameObject obj = Instantiate(prefab, NavRoot);
             var piece = obj.GetComponent<DungeonPiece>();
 
             if (piece == null || piece.entrance == null)
