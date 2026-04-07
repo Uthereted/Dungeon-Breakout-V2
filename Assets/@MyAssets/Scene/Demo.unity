@@ -23620,6 +23620,8 @@ MonoBehaviour:
   corridorPrefabs:
   - {fileID: 2732217493847682597, guid: 0195b57e4adb5b845ad96628d9744e29, type: 3}
   - {fileID: 5209803884109455622, guid: 378d947f19411bd42a4dc3b7bff0ac18, type: 3}
+  - {fileID: 6251581233339677175, guid: 8621b7fa8c8f90848852e8de25fec535, type: 3}
+  - {fileID: 6251581233339677175, guid: 64422da5115f4584ba2caac660881cca, type: 3}
   roomPrefabs:
   - {fileID: 6403654532480323807, guid: 2629065933f5ea14f86552daa2433c48, type: 3}
   - {fileID: 416967313718504004, guid: 30dcff3d44cc52e4aadb82269b038676, type: 3}
@@ -23635,11 +23637,49 @@ MonoBehaviour:
   mainRoom: {fileID: 836182957}
   NavRoot: {fileID: 33235458}
   navSurface: {fileID: 33235457}
-  enemyPrefabs:
-  - {fileID: 357036878}
+  enemyPrefabs: []
   minEnemiesPerPiece: 1
   maxEnemiesPerPiece: 2
   enemySpawnChance: 0.7
+  decorationPrefabs:
+  - {fileID: 123292, guid: df22dae66d96c2944adb65e1661878de, type: 3}
+  - {fileID: 100352, guid: eb2fd9123802bbb43bd44dd7dd3c8df4, type: 3}
+  - {fileID: 133876, guid: 617f333324332de47a8b5f07cc0870cc, type: 3}
+  - {fileID: 144150, guid: fb698eb68f15b3845baf425febbee697, type: 3}
+  - {fileID: 132048, guid: e56ebb4a3996049479a45d35c3854e8c, type: 3}
+  - {fileID: 146280, guid: ee5004b267742a64aa2093fb4bb3d9c4, type: 3}
+  - {fileID: 168672, guid: 73b39cdd67614854b808700c7c5d34c7, type: 3}
+  - {fileID: 166584, guid: 184f44cf58e82434ab30e27aaaf9b05f, type: 3}
+  - {fileID: 144134, guid: 606dc5976508ea346a8b019a9f3be565, type: 3}
+  - {fileID: 187514, guid: baad99cbf08303549860656d6f6d6933, type: 3}
+  - {fileID: 100710, guid: 80afd7216bd97804b8df01616325b783, type: 3}
+  - {fileID: 172200, guid: b0eb8fcfe34bfa54d86e8fcc58f9ea64, type: 3}
+  - {fileID: 155118, guid: abf07ccdbcba5d747bb51ff4aa1b29cb, type: 3}
+  - {fileID: 124028, guid: 30d00bb7fb067de4c99cc3b87f401945, type: 3}
+  - {fileID: 182792, guid: 27ac44c94d7f6e741a7e270ce72ccd9b, type: 3}
+  - {fileID: 152086, guid: f5d18f98ce863ec418f3683ffd58ad85, type: 3}
+  - {fileID: 179390, guid: a2e4cdc587395c04cba2cad21f37b658, type: 3}
+  - {fileID: 192992, guid: 5ca5ea1058c3f1446bc9ae4b2d19d453, type: 3}
+  - {fileID: 159436, guid: 8bb2d7195ef956c439f151bb60ae257a, type: 3}
+  - {fileID: 113964, guid: 650caedadb056ca40870f3a4ba441ebf, type: 3}
+  - {fileID: 120480, guid: 08cedb31bf7d3414a92316d542661816, type: 3}
+  - {fileID: 126132, guid: 9a02c2175769e3445836efb454dd5ca8, type: 3}
+  - {fileID: 150698, guid: b024094a7a82a15488ff3693e5c8568e, type: 3}
+  - {fileID: 158532, guid: 5f453323eb1cb374b98c94ab5004a413, type: 3}
+  - {fileID: 113466, guid: 28c6a09d0f7dd13488875bb56d3d0fb3, type: 3}
+  - {fileID: 157312, guid: 7e58502dd20128c489f6d5c8603fdb93, type: 3}
+  - {fileID: 132366, guid: 71cbb2fd7033f3f41a689bcea02fd16c, type: 3}
+  - {fileID: 160402, guid: a4fb40fd0313a7b4892bc1ab977cc60b, type: 3}
+  - {fileID: 184880, guid: 4d049df82560916448d7cc76aea168e2, type: 3}
+  - {fileID: 158580, guid: 005dbe8d7290dbb4e9f8df4c17db9324, type: 3}
+  - {fileID: 195242, guid: c34daa6d7ae26f243b4ceaf341d6ae9b, type: 3}
+  - {fileID: 152502, guid: 6d25f3b3d5ab1b243b60794d51a93b36, type: 3}
+  - {fileID: 192186, guid: f61db0f6090c21848869d1d37b076d50, type: 3}
+  - {fileID: 141250, guid: 668e6a33e8614334c822a49aa47f9729, type: 3}
+  decoSpawnChance: 0.8
+  decoCollisionLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!4 &1048137472
 Transform:
   m_ObjectHideFlags: 0
@@ -23959,7 +23999,11 @@ MonoBehaviour:
   mouseSensitivity: 0.12
   jumpForce: 5
   groundCheckDistance: 0.25
+  groundStickForce: 10
+  maxSlopeAngle: 50
+  groundCheckRadius: 0.3
   animator: {fileID: 1069017159}
+  groundedGraceTime: 0.15
   movementLocked: 0
 --- !u!114 &1069017158
 MonoBehaviour:
@@ -39141,8 +39185,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 30.3, y: 9.2, z: 39.66}
-  m_Center: {x: 19, y: 2.3, z: 5.3}
+  m_Size: {x: 30.3, y: 19, z: 39.66}
+  m_Center: {x: 19, y: 3.5, z: 5.3}
 --- !u!1001 &1787431343
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -15,15 +15,24 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 5f;
     public float groundCheckDistance = 0.25f;
 
+    [Header("Stairs / Slopes")]
+    public float groundStickForce = 10f;
+    public float maxSlopeAngle = 50f;
+    public float groundCheckRadius = 0.3f;
+
     [Header("Animation")]
     public Animator animator;
+    public float groundedGraceTime = 0.15f;
 
     Rigidbody rb;
     Vector2 move;
     Vector2 look;
-    bool sprintInput; // Variable para saber si pulsa la tecla
-    bool isSprinting; // Variable real (Tecla + Dirección correcta)
+    bool sprintInput;
+    bool isSprinting;
     bool jumpRequest;
+    float lastGroundedTime;
+    bool grounded;
+    RaycastHit groundHit;
 
     public bool movementLocked;
 
@@ -80,6 +89,9 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        grounded = CheckGrounded(out groundHit);
+        if (grounded) lastGroundedTime = Time.time;
+
         if (!movementLocked)
         {
             Rotate();
@@ -88,7 +100,6 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            // Nos quedamos quietos
             rb.velocity = new Vector3(0f, rb.velocity.y, 0f);
         }
 
@@ -105,7 +116,7 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("InputY", 0f, 0.1f, Time.deltaTime);
             animator.SetFloat("Speed", 0f);
 
-            // no haga "Turn" mientras está atacando/recogiendo
+            // no haga "Turn" mientras estï¿½ atacando/recogiendo
             animator.SetFloat("Turn", 0f, 0.1f, Time.deltaTime);
 
             return;
@@ -134,7 +145,7 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("Speed", targetIntensity);
 
         // --- 5. Suelo ---
-        animator.SetBool("IsGrounded", IsGrounded());
+        animator.SetBool("IsGrounded", IsGroundedForAnimation());
 
         // --- 6. Velocidad global ---
         animator.speed = 1f;
@@ -153,19 +164,27 @@ public class PlayerController : MonoBehaviour
 
         if (dir.sqrMagnitude > 1f) dir.Normalize();
 
-        // <--- CAMBIO: Usamos la variable isSprinting calculada arriba
         float speed = isSprinting ? sprintSpeed : walkSpeed;
 
-        Vector3 vel = rb.velocity;
-        Vector3 target = dir * speed;
+        if (grounded && Vector3.Angle(groundHit.normal, Vector3.up) < maxSlopeAngle)
+        {
+            // Proyectar movimiento sobre la superficie del suelo (escaleras/rampas)
+            Vector3 slopeDir = Vector3.ProjectOnPlane(dir, groundHit.normal).normalized;
+            Vector3 target = slopeDir * speed;
 
-        rb.velocity = new Vector3(target.x, vel.y, target.z);
+            rb.velocity = target + Vector3.down * groundStickForce * Time.fixedDeltaTime;
+        }
+        else
+        {
+            Vector3 target = dir * speed;
+            rb.velocity = new Vector3(target.x, rb.velocity.y, target.z);
+        }
     }
 
     void Jump()
     {
         if (!jumpRequest) return;
-        if (!IsGrounded()) return;
+        if (!grounded) return;
 
         if (animator != null) animator.SetTrigger("Jump");
 
@@ -173,11 +192,20 @@ public class PlayerController : MonoBehaviour
         vel.y = 0f;
         rb.velocity = vel;
 
+        lastGroundedTime = -1f; // Evitar que la gracia permita doble salto
         rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
     }
 
-    bool IsGrounded()
+    bool CheckGrounded(out RaycastHit hit)
     {
-        return Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, 0.1f + groundCheckDistance);
+        Vector3 origin = transform.position + Vector3.up * (groundCheckRadius + 0.05f);
+        return Physics.SphereCast(origin, groundCheckRadius, Vector3.down, out hit,
+            0.05f + groundCheckDistance, ~0, QueryTriggerInteraction.Ignore);
+    }
+
+    bool IsGroundedForAnimation()
+    {
+        // Gracia para no activar fall animation en escalones pequeÃ±os
+        return grounded || (Time.time - lastGroundedTime < groundedGraceTime);
     }
 }

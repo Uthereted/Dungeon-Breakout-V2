@@ -11,7 +11,7 @@ public class ProceduralDungeonGenerator : MonoBehaviour
     public GameObject[] roomPrefabs;
 
     [Header("Configuración")]
-    public Transform startPoint;
+    public Transform[] startPoints;
     public int maxPieces = 20;
 
     [Tooltip("0 = aleatorio cada vez")]
@@ -32,10 +32,11 @@ public class ProceduralDungeonGenerator : MonoBehaviour
     public Transform NavRoot;
     public NavMeshSurface navSurface;
 
-    private readonly Queue<(ConnectorPoint connector, bool mustBeCorridor)> openConnectors
-        = new Queue<(ConnectorPoint, bool)>();
+    private readonly List<Queue<(ConnectorPoint connector, bool mustBeCorridor)>> branchQueues
+        = new List<Queue<(ConnectorPoint, bool)>>();
 
     private int placedCount = 0;
+    private int activeBranch = 0;
 
     [Header("Enemigos")]
     public GameObject[] enemyPrefabs;
@@ -43,6 +44,12 @@ public class ProceduralDungeonGenerator : MonoBehaviour
     public int maxEnemiesPerPiece = 2;
     [Range(0f, 1f)] public float enemySpawnChance = 0.7f;
     private readonly List<EnemySetup> enemyRooms = new List<EnemySetup>();
+
+    [Header("Decoraciones")]
+    public GameObject[] decorationPrefabs;
+    [Range(0f, 1f)] public float decoSpawnChance = 0.8f;
+    public LayerMask decoCollisionLayer;
+    private readonly List<List<Transform>> decoSpawnPoints = new List<List<Transform>>();
 
 
     // ---------------------------------------------------------------
@@ -70,18 +77,36 @@ public class ProceduralDungeonGenerator : MonoBehaviour
             Physics.SyncTransforms();
         }
 
-        GameObject first = TrySpawnAndAlign(corridorPrefabs, startPoint);
-        if (first == null) { Debug.LogError("[DungeonGen] No se pudo colocar la pieza inicial."); return; }
+        // Generar una pieza inicial desde cada punto de inicio, cada una con su propia cola
+        foreach (Transform sp in startPoints)
+        {
+            if (sp == null) continue;
 
-        RegisterExits(first.GetComponent<DungeonPiece>(), mustBeCorridor: false);
+            var queue = new Queue<(ConnectorPoint, bool)>();
+            branchQueues.Add(queue);
+
+            GameObject first = TrySpawnAndAlign(corridorPrefabs, sp);
+            if (first == null)
+            {
+                Debug.LogWarning($"[DungeonGen] No se pudo colocar pieza inicial en {sp.name}");
+                continue;
+            }
+
+            RegisterExits(first.GetComponent<DungeonPiece>(), mustBeCorridor: false);
+        }
 
         int safety = 0;
 
-        while (openConnectors.Count > 0 && placedCount < effectiveMax)
+        // Round-robin: procesar un conector de cada rama por turno
+        while (placedCount < effectiveMax && BranchesHaveConnectors())
         {
             if (++safety > 5000) { Debug.LogWarning("DungeonGen: safety break"); break; }
 
-            var (connector, mustBeCorridor) = openConnectors.Dequeue();
+            // Buscar la siguiente rama que tenga conectores
+            var queue = NextActiveBranch();
+            if (queue == null) break;
+
+            var (connector, mustBeCorridor) = queue.Dequeue();
             if (connector.isConnected) continue;
 
             bool isLastSlot = placedCount >= effectiveMax - 1;
@@ -120,12 +145,15 @@ public class ProceduralDungeonGenerator : MonoBehaviour
             RegisterExits(piece, mustBeCorridor: placeRoom);
         }
 
-        // Cerrar conectores abiertos restantes
-        while (openConnectors.Count > 0)
+        // Cerrar conectores abiertos restantes de todas las ramas
+        foreach (var queue in branchQueues)
         {
-            var (connector, mustBeCorridor) = openConnectors.Dequeue();
-            if (!connector.isConnected)
-                CloseWithRoom(connector, mustBeCorridor);
+            while (queue.Count > 0)
+            {
+                var (connector, mustBeCorridor) = queue.Dequeue();
+                if (!connector.isConnected)
+                    CloseWithRoom(connector, mustBeCorridor);
+            }
         }
 
     }
@@ -138,6 +166,7 @@ public class ProceduralDungeonGenerator : MonoBehaviour
         if (navSurface != null)
             navSurface.BuildNavMesh();
 
+        SpawnDecorations();
         SpawnEnemiesInPieces();
 
         // Para el enemigo de la sala principal no dar warning por NavMeshAgent sin NavMesh
@@ -189,6 +218,97 @@ public class ProceduralDungeonGenerator : MonoBehaviour
         }
     }
 
+    void SpawnDecorations()
+    {
+        if (decorationPrefabs == null || decorationPrefabs.Length == 0) return;
+
+        foreach (List<Transform> points in decoSpawnPoints)
+        {
+            foreach (Transform point in points)
+            {
+                if (point == null) continue;
+                if (Random.value > decoSpawnChance) continue;
+
+                // Barajar prefabs para probar varios si hay colisión
+                int[] prefabIndices = ShuffledIndices(decorationPrefabs.Length);
+                bool placed = false;
+
+                for (int i = 0; i < decorationPrefabs.Length; i++)
+                {
+                    GameObject prefab = decorationPrefabs[prefabIndices[i]];
+                    GameObject obj = Instantiate(prefab, point.position, point.rotation, point);
+
+                    // Asignar layer de decoración para que el OverlapBox los detecte entre sí
+                    int decoLayer = LayerMaskToLayer(decoCollisionLayer);
+                    SetLayerRecursive(obj, decoLayer);
+
+                    Physics.SyncTransforms();
+
+                    if (DecoHasOverlap(obj))
+                    {
+                        Destroy(obj);
+                        Physics.SyncTransforms();
+                        continue;
+                    }
+
+                    // Añadir NavMeshObstacle para que los enemigos esquiven la decoración
+                    BoxCollider bc = obj.GetComponent<BoxCollider>();
+                    if (bc == null) bc = obj.GetComponentInChildren<BoxCollider>();
+                    if (bc != null)
+                    {
+                        NavMeshObstacle obstacle = obj.AddComponent<NavMeshObstacle>();
+                        obstacle.shape = NavMeshObstacleShape.Box;
+                        obstacle.center = bc.center;
+                        obstacle.size = bc.size * 0.6f;
+                        obstacle.carving = true;
+                    }
+
+                    placed = true;
+                    break;
+                }
+
+                if (!placed)
+                    Debug.Log($"[DungeonGen] Decoración descartada en {point.name}: todas colisionan");
+            }
+        }
+    }
+
+    bool DecoHasOverlap(GameObject obj)
+    {
+        BoxCollider bc = obj.GetComponent<BoxCollider>();
+        if (bc == null) bc = obj.GetComponentInChildren<BoxCollider>();
+        if (bc == null) return false;
+
+        Vector3 worldCenter = bc.transform.TransformPoint(bc.center);
+        Vector3 worldExtents = Vector3.Scale(bc.size * 0.5f, bc.transform.lossyScale);
+
+        // Reducir un poco para evitar falsos positivos con superficies adyacentes
+        worldExtents -= Vector3.one * 0.02f;
+        worldExtents = new Vector3(
+            Mathf.Max(worldExtents.x, 0.01f),
+            Mathf.Max(worldExtents.y, 0.01f),
+            Mathf.Max(worldExtents.z, 0.01f)
+        );
+
+        Collider[] hits = Physics.OverlapBox(
+            worldCenter,
+            worldExtents,
+            bc.transform.rotation,
+            decoCollisionLayer,
+            QueryTriggerInteraction.Ignore
+        );
+
+        foreach (var hit in hits)
+        {
+            // Ignorar el propio collider
+            if (hit.transform.IsChildOf(obj.transform) || hit.transform == obj.transform)
+                continue;
+            return true;
+        }
+
+        return false;
+    }
+
     // ---------------------------------------------------------------
     GameObject TrySpawnAndAlign(GameObject[] pool, Transform target)
     {
@@ -232,6 +352,24 @@ public class ProceduralDungeonGenerator : MonoBehaviour
             {
                 enemyRooms.Add(roomSetup);
                 Debug.Log($"[DungeonGen] Pieza con setup de enemigos detectada: {obj.name}");
+            }
+
+            // Recoger puntos de decoración (DecorationSpawn/Deco1, Deco2, Deco3...)
+            List<Transform> decos = new List<Transform>();
+            Transform decoParent = obj.transform.Find("DecorationSpawn");
+            if (decoParent != null)
+            {
+                for (int d = 1; ; d++)
+                {
+                    Transform deco = decoParent.Find($"Deco{d}");
+                    if (deco == null) break;
+                    decos.Add(deco);
+                }
+            }
+            if (decos.Count > 0)
+            {
+                decoSpawnPoints.Add(decos);
+                Debug.Log($"[DungeonGen] {obj.name}: {decos.Count} puntos de decoración encontrados");
             }
 
             return obj;
@@ -371,9 +509,32 @@ public class ProceduralDungeonGenerator : MonoBehaviour
     void RegisterExits(DungeonPiece piece, bool mustBeCorridor)
     {
         if (piece.exits == null) return;
+        if (branchQueues.Count == 0) return;
+
+        var queue = branchQueues[activeBranch % branchQueues.Count];
         foreach (var exit in piece.exits)
             if (exit != null && !exit.isConnected)
-                openConnectors.Enqueue((exit, mustBeCorridor));
+                queue.Enqueue((exit, mustBeCorridor));
+    }
+
+    // ---------------------------------------------------------------
+    bool BranchesHaveConnectors()
+    {
+        foreach (var q in branchQueues)
+            if (q.Count > 0) return true;
+        return false;
+    }
+
+    Queue<(ConnectorPoint, bool)> NextActiveBranch()
+    {
+        int count = branchQueues.Count;
+        for (int i = 0; i < count; i++)
+        {
+            activeBranch = (activeBranch + 1) % count;
+            if (branchQueues[activeBranch].Count > 0)
+                return branchQueues[activeBranch];
+        }
+        return null;
     }
 
     // ---------------------------------------------------------------
@@ -383,6 +544,13 @@ public class ProceduralDungeonGenerator : MonoBehaviour
         for (int i = 0; i < 32; i++)
             if ((val & (1 << i)) != 0) return i;
         return 0;
+    }
+
+    static void SetLayerRecursive(GameObject obj, int layer)
+    {
+        obj.layer = layer;
+        foreach (Transform child in obj.transform)
+            SetLayerRecursive(child.gameObject, layer);
     }
 
     static int[] ShuffledIndices(int count)
