@@ -4,6 +4,14 @@ using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 
+[System.Serializable]
+public class SpecialRoomRule
+{
+    public SpecialRoomType type;
+    public GameObject[] prefabs;
+    public int maxCount = 1;
+}
+
 public class ProceduralDungeonGenerator : MonoBehaviour
 {
     [Header("Prefabs")]
@@ -32,8 +40,8 @@ public class ProceduralDungeonGenerator : MonoBehaviour
     public Transform NavRoot;
     public NavMeshSurface navSurface;
 
-    private readonly List<Queue<(ConnectorPoint connector, bool mustBeCorridor)>> branchQueues
-        = new List<Queue<(ConnectorPoint, bool)>>();
+    private readonly List<Queue<(ConnectorPoint connector, bool mustBeCorridor, StairDirection lastStair)>> branchQueues
+        = new List<Queue<(ConnectorPoint, bool, StairDirection)>>();
 
     private int placedCount = 0;
     private int activeBranch = 0;
@@ -44,6 +52,10 @@ public class ProceduralDungeonGenerator : MonoBehaviour
     public int maxEnemiesPerPiece = 2;
     [Range(0f, 1f)] public float enemySpawnChance = 0.7f;
     private readonly List<EnemySetup> enemyRooms = new List<EnemySetup>();
+
+    [Header("Salas especiales")]
+    public SpecialRoomRule[] specialRoomRules;
+    private readonly Dictionary<SpecialRoomType, int> specialRoomCounts = new Dictionary<SpecialRoomType, int>();
 
     [Header("Decoraciones")]
     public GameObject[] decorationPrefabs;
@@ -82,7 +94,7 @@ public class ProceduralDungeonGenerator : MonoBehaviour
         {
             if (sp == null) continue;
 
-            var queue = new Queue<(ConnectorPoint, bool)>();
+            var queue = new Queue<(ConnectorPoint, bool, StairDirection)>();
             branchQueues.Add(queue);
 
             GameObject first = TrySpawnAndAlign(corridorPrefabs, sp);
@@ -92,7 +104,8 @@ public class ProceduralDungeonGenerator : MonoBehaviour
                 continue;
             }
 
-            RegisterExits(first.GetComponent<DungeonPiece>(), mustBeCorridor: false);
+            var firstPiece = first.GetComponent<DungeonPiece>();
+            RegisterExits(firstPiece, mustBeCorridor: false, lastStair: firstPiece.stairDirection);
         }
 
         int safety = 0;
@@ -106,7 +119,7 @@ public class ProceduralDungeonGenerator : MonoBehaviour
             var queue = NextActiveBranch();
             if (queue == null) break;
 
-            var (connector, mustBeCorridor) = queue.Dequeue();
+            var (connector, mustBeCorridor, lastStair) = queue.Dequeue();
             if (connector.isConnected) continue;
 
             bool isLastSlot = placedCount >= effectiveMax - 1;
@@ -118,14 +131,15 @@ public class ProceduralDungeonGenerator : MonoBehaviour
             }
 
             bool placeRoom = !mustBeCorridor && Random.value < roomChance;
-            GameObject[] pool = placeRoom ? roomPrefabs : corridorPrefabs;
+            GameObject[] corridorPool = FilterCorridorsByStair(corridorPrefabs, lastStair);
+            GameObject[] pool = placeRoom ? roomPrefabs : corridorPool;
 
             GameObject spawned = TrySpawnAndAlign(pool, connector.transform);
 
             // Si falla con el tipo preferido intenta el otro
             if (spawned == null)
             {
-                GameObject[] fallback = placeRoom ? corridorPrefabs : roomPrefabs;
+                GameObject[] fallback = placeRoom ? corridorPool : roomPrefabs;
                 spawned = TrySpawnAndAlign(fallback, connector.transform);
                 placeRoom = !placeRoom;
             }
@@ -142,19 +156,47 @@ public class ProceduralDungeonGenerator : MonoBehaviour
             var piece = spawned.GetComponent<DungeonPiece>();
             if (piece.entrance != null) piece.entrance.isConnected = true;
 
-            RegisterExits(piece, mustBeCorridor: placeRoom);
+            StairDirection newStair = piece.stairDirection;
+            RegisterExits(piece, mustBeCorridor: placeRoom, lastStair: newStair);
         }
 
-        // Cerrar conectores abiertos restantes de todas las ramas
+        // Recoger todos los conectores abiertos
+        var openConnectors = new List<(ConnectorPoint connector, bool mustBeCorridor)>();
         foreach (var queue in branchQueues)
         {
             while (queue.Count > 0)
             {
-                var (connector, mustBeCorridor) = queue.Dequeue();
-                if (!connector.isConnected)
-                    CloseWithRoom(connector, mustBeCorridor);
+                var (connector2, mustBeCorridor2, _) = queue.Dequeue();
+                if (!connector2.isConnected)
+                    openConnectors.Add((connector2, mustBeCorridor2));
             }
         }
+
+        // Barajar para elegir al azar cuáles serán salas especiales
+        for (int i = openConnectors.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            (openConnectors[i], openConnectors[j]) = (openConnectors[j], openConnectors[i]);
+        }
+
+        // Reservar conectores para salas especiales y colocarlas primero
+        int reserveCount = 0;
+        if (specialRoomRules != null)
+            foreach (var rule in specialRoomRules)
+                reserveCount += rule.maxCount;
+
+        var specialConnectors = openConnectors.GetRange(0, Mathf.Min(reserveCount, openConnectors.Count));
+        var normalConnectors = openConnectors.GetRange(specialConnectors.Count, openConnectors.Count - specialConnectors.Count);
+
+        // Cerrar conectores normales con salas normales
+        foreach (var (conn, mustCorr) in normalConnectors)
+        {
+            if (!conn.isConnected)
+                CloseWithRoom(conn, mustCorr);
+        }
+
+        // Colocar salas especiales en los conectores reservados
+        PlaceSpecialRooms(specialConnectors);
 
     }
     IEnumerator BakeNavNextFrame()
@@ -491,6 +533,8 @@ public class ProceduralDungeonGenerator : MonoBehaviour
         var rp = roomObj.GetComponent<DungeonPiece>();
         if (rp.entrance != null) rp.entrance.isConnected = true;
 
+        TrackSpecialRoom(rp);
+
         if (rp.exits != null)
             foreach (var exit in rp.exits)
                 if (exit != null) exit.isConnected = true;
@@ -506,7 +550,7 @@ public class ProceduralDungeonGenerator : MonoBehaviour
     }
 
     // ---------------------------------------------------------------
-    void RegisterExits(DungeonPiece piece, bool mustBeCorridor)
+    void RegisterExits(DungeonPiece piece, bool mustBeCorridor, StairDirection lastStair)
     {
         if (piece.exits == null) return;
         if (branchQueues.Count == 0) return;
@@ -514,7 +558,7 @@ public class ProceduralDungeonGenerator : MonoBehaviour
         var queue = branchQueues[activeBranch % branchQueues.Count];
         foreach (var exit in piece.exits)
             if (exit != null && !exit.isConnected)
-                queue.Enqueue((exit, mustBeCorridor));
+                queue.Enqueue((exit, mustBeCorridor, lastStair));
     }
 
     // ---------------------------------------------------------------
@@ -525,7 +569,7 @@ public class ProceduralDungeonGenerator : MonoBehaviour
         return false;
     }
 
-    Queue<(ConnectorPoint, bool)> NextActiveBranch()
+    Queue<(ConnectorPoint, bool, StairDirection)> NextActiveBranch()
     {
         int count = branchQueues.Count;
         for (int i = 0; i < count; i++)
@@ -565,6 +609,96 @@ public class ProceduralDungeonGenerator : MonoBehaviour
         return arr;
     }
 
+
+    // ---------------------------------------------------------------
+    // Salas especiales
+    // ---------------------------------------------------------------
+
+    void TrackSpecialRoom(DungeonPiece piece)
+    {
+        if (piece.specialRoomType == SpecialRoomType.None) return;
+
+        if (!specialRoomCounts.ContainsKey(piece.specialRoomType))
+            specialRoomCounts[piece.specialRoomType] = 0;
+
+        specialRoomCounts[piece.specialRoomType]++;
+        Debug.Log($"[DungeonGen] Sala especial colocada: {piece.specialRoomType} (total: {specialRoomCounts[piece.specialRoomType]})");
+    }
+
+    void PlaceSpecialRooms(List<(ConnectorPoint connector, bool mustBeCorridor)> connectors)
+    {
+        if (specialRoomRules == null || specialRoomRules.Length == 0) return;
+
+        int connIndex = 0;
+
+        foreach (var rule in specialRoomRules)
+        {
+            if (rule.prefabs == null || rule.prefabs.Length == 0)
+            {
+                Debug.LogWarning($"[DungeonGen] No hay prefabs para sala especial: {rule.type}");
+                continue;
+            }
+
+            int placed = 0;
+            while (placed < rule.maxCount && connIndex < connectors.Count)
+            {
+                var (conn, mustCorr) = connectors[connIndex];
+                connIndex++;
+
+                if (conn.isConnected) continue;
+
+                ConnectorPoint target = conn;
+
+                // Colocar corredor intermedio si es necesario
+                if (mustCorr)
+                {
+                    GameObject corridorObj = TrySpawnAndAlign(corridorPrefabs, conn.transform);
+                    if (corridorObj == null) continue;
+
+                    conn.isConnected = true;
+                    var cp = corridorObj.GetComponent<DungeonPiece>();
+                    if (cp.entrance != null) cp.entrance.isConnected = true;
+                    if (cp.exits == null || cp.exits.Length == 0) continue;
+                    target = cp.exits[0];
+                }
+
+                GameObject roomObj = TrySpawnAndAlign(rule.prefabs, target.transform);
+                if (roomObj == null) continue;
+
+                target.isConnected = true;
+                conn.isConnected = true;
+                var rp = roomObj.GetComponent<DungeonPiece>();
+                if (rp.entrance != null) rp.entrance.isConnected = true;
+
+                TrackSpecialRoom(rp);
+                placed++;
+            }
+
+            if (placed == 0)
+                Debug.LogWarning($"[DungeonGen] No se pudo colocar sala especial: {rule.type}");
+        }
+    }
+
+    // Filtra pasillos para evitar StairsUp→StairsDown o StairsDown→StairsUp
+    GameObject[] FilterCorridorsByStair(GameObject[] pool, StairDirection lastStair)
+    {
+        if (lastStair == StairDirection.None) return pool;
+
+        StairDirection forbidden = lastStair == StairDirection.Up
+            ? StairDirection.Down
+            : StairDirection.Up;
+
+        var filtered = new List<GameObject>();
+        foreach (var prefab in pool)
+        {
+            var piece = prefab.GetComponent<DungeonPiece>();
+            if (piece != null && piece.stairDirection == forbidden) continue;
+            filtered.Add(prefab);
+        }
+
+        // Si todo quedó filtrado, devolver el pool original para no bloquear la generación
+        return filtered.Count > 0 ? filtered.ToArray() : pool;
+    }
 
     static GameObject GetRandomPrefab(GameObject[] arr)
         => arr[Random.Range(0, arr.Length)];

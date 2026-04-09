@@ -2,12 +2,16 @@ using UnityEngine;
 using System.Collections.Generic;
 
 public enum PieceType { Corridor, Room }
+public enum StairDirection { None, Up, Down }
+public enum SpecialRoomType { None, Chest, Exit }
 
 public class DungeonPiece : MonoBehaviour
 {
     public PieceType pieceType;
+    public StairDirection stairDirection = StairDirection.None;
+    public SpecialRoomType specialRoomType = SpecialRoomType.None;
 
-    // Se rellenan automáticamente en Awake, no hace falta arrastrar nada
+    // Se rellenan automï¿½ticamente en Awake, no hace falta arrastrar nada
     [HideInInspector] public ConnectorPoint entrance;
     [HideInInspector] public ConnectorPoint[] exits;
 
@@ -34,10 +38,10 @@ public class DungeonPiece : MonoBehaviour
         }
 
         if (entrance == null)
-            Debug.LogError($"[DungeonPiece] {name}: no se encontró Connector/Entrance");
+            Debug.LogError($"[DungeonPiece] {name}: no se encontrï¿½ Connector/Entrance");
 
-        if (exits.Length == 0)
-            Debug.LogWarning($"[DungeonPiece] {name}: no se encontró ningún exit en Connector/");
+        if (exits.Length == 0 && specialRoomType == SpecialRoomType.None)
+            Debug.LogWarning($"[DungeonPiece] {name}: no se encontrÃ³ ningÃºn exit en Connector/");
     }
 
     ConnectorPoint GetConnector(string path)
@@ -56,7 +60,7 @@ public class DungeonPiece : MonoBehaviour
     // Preview en editor sin entrar en Play
     void OnValidate()
     {
-        // Mostrar en inspector qué ha encontrado (solo lectura)
+        // Mostrar en inspector quï¿½ ha encontrado (solo lectura)
         entrance = transform.Find("Connector/Entrance")?.GetComponent<ConnectorPoint>();
     }
 #endif
