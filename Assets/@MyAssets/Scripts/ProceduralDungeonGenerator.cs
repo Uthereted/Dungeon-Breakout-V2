@@ -220,6 +220,15 @@ public class ProceduralDungeonGenerator : MonoBehaviour
             if (enemyAgent != null && !enemyAgent.enabled)
                 enemyAgent.enabled = true;
         }
+
+        RangedEnemyController[] rangedEnemies = FindObjectsByType<RangedEnemyController>(FindObjectsSortMode.None);
+
+        foreach (RangedEnemyController enemy in rangedEnemies)
+        {
+            NavMeshAgent enemyAgent = enemy.GetComponent<NavMeshAgent>();
+            if (enemyAgent != null && !enemyAgent.enabled)
+                enemyAgent.enabled = true;
+        }
     }
 
     void SpawnEnemiesInPieces()
@@ -255,6 +264,12 @@ public class ProceduralDungeonGenerator : MonoBehaviour
                 if (enemyController != null)
                 {
                     enemyController.patrolArea = room.patrolArea;
+                }
+
+                RangedEnemyController rangedController = enemyObj.GetComponent<RangedEnemyController>();
+                if (rangedController != null)
+                {
+                    rangedController.patrolArea = room.patrolArea;
                 }
             }
         }

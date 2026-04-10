@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
@@ -47,6 +47,13 @@ public class EnemyController : MonoBehaviour
         health = GetComponent<EnemyHealthDEMO>();
 
         if (animator == null) animator = GetComponentInChildren<Animator>();
+
+        if (player == null)
+        {
+            GameObject p = GameObject.FindWithTag("Player");
+            if (p != null) player = p.transform;
+        }
+
         if (playerHealth == null && player != null)
             playerHealth = player.GetComponent<HealthControllerDEMO>();
 

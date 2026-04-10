@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     bool isSprinting;
     bool jumpRequest;
     float lastGroundedTime;
+    float jumpCooldownUntil;
     bool grounded;
     RaycastHit groundHit;
 
@@ -89,14 +90,16 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        grounded = CheckGrounded(out groundHit);
+        bool rawGrounded = CheckGrounded(out groundHit);
+        // Ignore ground detection briefly after jumping so stick force doesn't cancel the jump
+        grounded = rawGrounded && Time.time >= jumpCooldownUntil;
         if (grounded) lastGroundedTime = Time.time;
 
         if (!movementLocked)
         {
             Rotate();
-            Move();
             Jump();
+            Move();
         }
         else
         {
@@ -192,7 +195,9 @@ public class PlayerController : MonoBehaviour
         vel.y = 0f;
         rb.velocity = vel;
 
-        lastGroundedTime = -1f; // Evitar que la gracia permita doble salto
+        lastGroundedTime = -1f;
+        grounded = false;
+        jumpCooldownUntil = Time.time + 0.25f; // ignore ground for 0.25s so jump isn't cancelled
         rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
     }
 
