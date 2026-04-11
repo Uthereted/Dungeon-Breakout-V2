@@ -24312,8 +24312,8 @@ MonoBehaviour:
   heavy2State: Cha_Attack_Heavy_2
   chainWindow: 0.65
   inputBufferTime: 0.25
-  lightDamage: 1
-  heavyDamage: 2
+  defaultLightDamage: 1
+  defaultHeavyDamage: 2
 --- !u!114 &1069017163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24326,7 +24326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d053c604fab7a4f4a920f14b2f76fce0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swordSocket: {fileID: 1154887961}
+  weaponSocket: {fileID: 1154887961}
   interactUI: {fileID: 2074915813}
   animator: {fileID: 1069017159}
   player: {fileID: 1069017157}

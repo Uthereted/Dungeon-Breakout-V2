@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("Look")]
     public float mouseSensitivity = 0.12f;
+    public Transform cameraPivot;
+    public float minPitch = -30f;
+    public float maxPitch = 60f;
 
     [Header("Jump")]
     public float jumpForce = 5f;
@@ -27,6 +30,7 @@ public class PlayerController : MonoBehaviour
     Rigidbody rb;
     Vector2 move;
     Vector2 look;
+    float pitch;
     bool sprintInput;
     bool isSprinting;
     bool jumpRequest;
@@ -159,6 +163,13 @@ public class PlayerController : MonoBehaviour
         float yaw = look.x * mouseSensitivity;
         Quaternion targetRot = Quaternion.Euler(0f, rb.rotation.eulerAngles.y + yaw, 0f);
         rb.MoveRotation(targetRot);
+
+        if (cameraPivot)
+        {
+            pitch -= look.y * mouseSensitivity;
+            pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
+            cameraPivot.localRotation = Quaternion.Euler(pitch, 0f, 0f);
+        }
     }
 
     void Move()
