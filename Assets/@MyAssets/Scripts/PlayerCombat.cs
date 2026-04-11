@@ -5,7 +5,7 @@ public class PlayerCombat : MonoBehaviour
 {
     [Header("Refs")]
     public Animator animator;
-    public SwordController sword;
+    public WeaponController sword;
 
     [Header("Triggers")]
     public string lightTrigger = "LightNext";
@@ -21,9 +21,9 @@ public class PlayerCombat : MonoBehaviour
     [Range(0f, 1f)] public float chainWindow = 0.65f;
     public float inputBufferTime = 0.35f;
 
-    [Header("Damage")]
-    public int lightDamage = 1;
-    public int heavyDamage = 2;
+    [Header("Damage (fallback if weapon has no Weapon script)")]
+    public int defaultLightDamage = 1;
+    public int defaultHeavyDamage = 2;
 
     bool queuedLight, queuedHeavy;
     float queuedLightUntil, queuedHeavyUntil;
@@ -31,8 +31,8 @@ public class PlayerCombat : MonoBehaviour
     void Awake()
     {
         if (!animator) animator = GetComponentInChildren<Animator>();
-        if (!sword) sword = GetComponent<SwordController>();
-        if (!sword && transform.parent) sword = GetComponentInParent<SwordController>();
+        if (!sword) sword = GetComponent<WeaponController>();
+        if (!sword && transform.parent) sword = GetComponentInParent<WeaponController>();
     }
 
     void Update()
@@ -62,12 +62,16 @@ public class PlayerCombat : MonoBehaviour
 
     void UpdateHitbox(AnimatorStateInfo st)
     {
-        if (!sword || !sword.HasSword) return;
-        var hitbox = sword.EquippedSword.GetComponentInChildren<SwordHitbox>(true);
+        if (!sword || !sword.HasWeapon) return;
+        var hitbox = sword.EquippedWeaponTransform.GetComponentInChildren<WeaponHitbox>(true);
         if (!hitbox) return;
 
         bool inAttack = IsAnyAttackState(st);
-        int dmg = IsHeavyState(st) ? heavyDamage : lightDamage;
+
+        var weapon = sword.EquippedWeapon;
+        int light = weapon ? weapon.lightDamage : defaultLightDamage;
+        int heavy = weapon ? weapon.heavyDamage : defaultHeavyDamage;
+        int dmg = IsHeavyState(st) ? heavy : light;
 
         hitbox.SetActive(inAttack, dmg);
     }
@@ -106,7 +110,7 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    bool CanAttack() => sword != null && sword.HasSword && !sword.IsGrabbing;
+    bool CanAttack() => sword != null && sword.HasWeapon && !sword.IsGrabbing;
     bool IsAnyAttackState(AnimatorStateInfo st) =>
         st.IsName(light1State) || st.IsName(light2State) ||
         st.IsName(heavy1State) || st.IsName(heavy2State);

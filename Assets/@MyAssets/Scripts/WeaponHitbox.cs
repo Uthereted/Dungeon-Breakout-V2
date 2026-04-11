@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SwordHitbox : MonoBehaviour
+public class WeaponHitbox : MonoBehaviour
 {
     public LayerMask enemyMask;
     BoxCollider box;
@@ -28,13 +28,13 @@ public class SwordHitbox : MonoBehaviour
         }
         else if (!isAttacking && active)
         {
-            // Terminó el ataque
+            // Terminï¿½ el ataque
             active = false;
             hitThisSwing.Clear();
             if (box) box.enabled = false;
         }
 
-        // Actualizar daño por si cambia entre light/heavy
+        // Actualizar daï¿½o por si cambia entre light/heavy
         if (active) damage = dmg;
     }
 

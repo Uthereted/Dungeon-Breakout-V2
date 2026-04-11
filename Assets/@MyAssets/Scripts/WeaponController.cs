@@ -2,10 +2,10 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class SwordController : MonoBehaviour
+public class WeaponController : MonoBehaviour
 {
     [Header("Refs")]
-    public Transform swordSocket;
+    public Transform weaponSocket;
     public PlayerInteractUI interactUI;
     public Animator animator;
     public PlayerController player;
@@ -15,12 +15,14 @@ public class SwordController : MonoBehaviour
     public float grabDuration = 1.0f;
     public string grabText = "Grab [F]";
 
-    Transform equippedSword, nearbySword;
+    Transform equippedWeaponTransform, nearbyWeapon;
+    Weapon equippedWeapon;
     bool grabbing;
 
-    public bool HasSword => equippedSword != null;
+    public bool HasWeapon => equippedWeaponTransform != null;
     public bool IsGrabbing => grabbing;
-    public Transform EquippedSword => equippedSword;
+    public Transform EquippedWeaponTransform => equippedWeaponTransform;
+    public Weapon EquippedWeapon => equippedWeapon;
 
     void Awake()
     {
@@ -32,7 +34,7 @@ public class SwordController : MonoBehaviour
     public void OnInteract(InputValue v)
     {
         if (!v.isPressed || grabbing) return;
-        if (nearbySword == null || equippedSword != null) return;
+        if (nearbyWeapon == null || equippedWeaponTransform != null) return;
         StartCoroutine(GrabRoutine());
     }
 
@@ -43,12 +45,12 @@ public class SwordController : MonoBehaviour
         if (player) player.movementLocked = true;
         if (animator) animator.SetTrigger(grabTrigger);
         yield return new WaitForSeconds(grabDuration);
-        EquipSword(nearbySword);
+        EquipWeapon(nearbyWeapon);
         grabbing = false;
         if (player) player.movementLocked = false;
     }
 
-    void EquipSword(Transform sword)
+    void EquipWeapon(Transform sword)
     {
         if (!sword) return;
 
@@ -67,26 +69,27 @@ public class SwordController : MonoBehaviour
             hitCol.enabled = false;
         }
 
-        sword.SetParent(swordSocket);
+        sword.SetParent(weaponSocket);
         sword.localPosition = Vector3.zero;
         sword.localRotation = Quaternion.identity;
-        equippedSword = sword;
-        nearbySword = null;
+        equippedWeaponTransform = sword;
+        equippedWeapon = sword.GetComponent<Weapon>();
+        nearbyWeapon = null;
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("SwordPick")) return;
-        if (equippedSword != null || grabbing) return;
-        nearbySword = other.transform;
+        if (equippedWeaponTransform != null || grabbing) return;
+        nearbyWeapon = other.transform;
         if (interactUI) interactUI.Show(grabText);
     }
 
     void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("SwordPick")) return;
-        if (nearbySword != other.transform) return;
-        nearbySword = null;
+        if (nearbyWeapon != other.transform) return;
+        nearbyWeapon = null;
         if (interactUI) interactUI.Hide();
     }
 }
