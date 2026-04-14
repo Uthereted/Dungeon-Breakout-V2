@@ -6,6 +6,7 @@ public class MenuManager : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private GameObject mainMenu;
+    [SerializeField] private GameObject hud;
 
     [Header("Camera")]
     [SerializeField] private Camera mainCamera;
@@ -22,9 +23,12 @@ public class MenuManager : MonoBehaviour
 
     private void Start()
     {
-        // menú visible
+        // menú visible, HUD oculto
         if (mainMenu != null)
             mainMenu.SetActive(true);
+
+        if (hud != null)
+            hud.SetActive(false);
 
         // disable Cinemachine so it doesn't override camera position
         if (mainCamera != null)
@@ -74,9 +78,12 @@ public class MenuManager : MonoBehaviour
             yield return null;
         }
 
-        // ocultar menú
+        // ocultar menú, mostrar HUD
         if (mainMenu != null)
             mainMenu.SetActive(false);
+
+        if (hud != null)
+            hud.SetActive(true);
 
         // re-enable Cinemachine so it takes over camera control
         if (cinemachineBrain != null)

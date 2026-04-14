@@ -1,12 +1,11 @@
 using UnityEngine;
+using DungeonBreakoutV2;
 
 [RequireComponent(typeof(Rigidbody))]
 public class StoneProjectile : MonoBehaviour
 {
     public int damage = 1;
     public float lifetime = 5f;
-
-    [HideInInspector] public HealthControllerDEMO playerHealth;
 
     private bool hasHit;
 
@@ -30,12 +29,11 @@ public class StoneProjectile : MonoBehaviour
         if (hasHit) return;
         hasHit = true;
 
-        if (playerHealth != null && !playerHealth.IsDead)
+        if (HealthSystem.Instance != null && !HealthSystem.Instance.IsDead)
         {
-            // Check if we hit the player
-            if (collision.transform.root == playerHealth.transform.root)
+            if (collision.transform.root.CompareTag("Player"))
             {
-                playerHealth.TakeHit(damage);
+                HealthSystem.Instance.TakeDamage(damage);
                 Destroy(gameObject);
                 return;
             }

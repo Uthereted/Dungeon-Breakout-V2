@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using DungeonBreakoutV2;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class EnemyController : MonoBehaviour
@@ -19,13 +20,13 @@ public class EnemyController : MonoBehaviour
     public float minWaitTime = 1f;
     public float maxWaitTime = 3f;
 
+    [Header("Damage")]
+    public float damage = 15f;
+
     [Header("Animación")]
     public float animDamp = 0.12f;
     public float attackLockTime = 0.7f;
     public float hitDelay = 0.35f;
-
-    [Header("DEMO Damage")]
-    public HealthControllerDEMO playerHealth;
 
     private NavMeshAgent agent;
     private float waitTimer;
@@ -54,9 +55,6 @@ public class EnemyController : MonoBehaviour
             if (p != null) player = p.transform;
         }
 
-        if (playerHealth == null && player != null)
-            playerHealth = player.GetComponent<HealthControllerDEMO>();
-
         if (!agent.isOnNavMesh)
         {
             if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 3f, NavMesh.AllAreas))
@@ -83,7 +81,7 @@ public class EnemyController : MonoBehaviour
         }
 
         // ── Player muerto: parar ──
-        if (playerHealth != null && playerHealth.IsDead)
+        if (HealthSystem.Instance != null && HealthSystem.Instance.IsDead)
         {
             agent.isStopped = true;
             agent.ResetPath();
@@ -99,9 +97,6 @@ public class EnemyController : MonoBehaviour
             UpdateAnimations();
             return;
         }
-
-        if (playerHealth == null)
-            playerHealth = player.GetComponent<HealthControllerDEMO>();
 
         float dist = Vector3.Distance(transform.position, player.position);
         attackTimer -= Time.deltaTime;
@@ -245,12 +240,12 @@ public class EnemyController : MonoBehaviour
     {
         // No pegar si estamos muertos o stuneados
         if (health != null && (health.IsDead || health.IsStunned)) return;
-        if (playerHealth == null || playerHealth.IsDead) return;
+        if (HealthSystem.Instance == null || HealthSystem.Instance.IsDead) return;
 
         float dist = Vector3.Distance(transform.position, player.position);
         if (dist <= attackRange + 0.2f)
         {
-            playerHealth.TakeHit(1);
+            HealthSystem.Instance.TakeDamage(damage);
         }
     }
 

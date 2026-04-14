@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using DungeonBreakoutV2;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class RangedEnemyController : MonoBehaviour
@@ -30,15 +31,13 @@ public class RangedEnemyController : MonoBehaviour
     public float fleeDelay = 1f;
 
     [Header("Projectile")]
+    public int damage = 10;
     public float throwForce = 14f;
     public float throwDelay = 0.45f;
 
     [Header("Animacion")]
     public float animDamp = 0.12f;
     public float attackLockTime = 0.9f;
-
-    [Header("DEMO Damage")]
-    public HealthControllerDEMO playerHealth;
 
     public BoxCollider patrolArea;
 
@@ -68,9 +67,6 @@ public class RangedEnemyController : MonoBehaviour
             if (p != null) player = p.transform;
         }
 
-        if (playerHealth == null && player != null)
-            playerHealth = player.GetComponent<HealthControllerDEMO>();
-
         if (!agent.isOnNavMesh)
         {
             if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 3f, NavMesh.AllAreas))
@@ -90,7 +86,7 @@ public class RangedEnemyController : MonoBehaviour
             return;
         }
 
-        if (playerHealth != null && playerHealth.IsDead)
+        if (HealthSystem.Instance != null && HealthSystem.Instance.IsDead)
         {
             agent.isStopped = true;
             agent.ResetPath();
@@ -105,9 +101,6 @@ public class RangedEnemyController : MonoBehaviour
             UpdateAnimations();
             return;
         }
-
-        if (playerHealth == null)
-            playerHealth = player.GetComponent<HealthControllerDEMO>();
 
         float dist = Vector3.Distance(transform.position, player.position);
         attackTimer -= Time.deltaTime;
@@ -232,7 +225,7 @@ public class RangedEnemyController : MonoBehaviour
         if (proj != null)
         {
             proj.SetOwner(gameObject);
-            proj.playerHealth = playerHealth;
+            proj.damage = damage;
         }
 
         Vector3 targetPos = player.position + Vector3.up * 1f;

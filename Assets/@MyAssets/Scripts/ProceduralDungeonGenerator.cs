@@ -492,12 +492,12 @@ public class ProceduralDungeonGenerator : MonoBehaviour
     bool HasOverlap(GameObject obj)
     {
         BoxCollider bc = GetBoundsCollider(obj);
-        if (bc == null) return false;
+        if (bc == null) return true; // no BoundsCheck = block placement
 
         Vector3 worldCenter = bc.transform.TransformPoint(bc.center);
         Vector3 worldExtents = Vector3.Scale(bc.size * 0.5f, bc.transform.lossyScale);
 
-        worldExtents -= Vector3.one * (overlapShrink * 0.5f);
+        // bc.size is already shrunk by SetupBoundsCheck, don't shrink again
         worldExtents = new Vector3(
             Mathf.Max(worldExtents.x, 0.05f),
             Mathf.Max(worldExtents.y, 0.05f),
@@ -507,7 +507,7 @@ public class ProceduralDungeonGenerator : MonoBehaviour
         Collider[] hits = Physics.OverlapBox(
             worldCenter,
             worldExtents,
-            obj.transform.rotation,
+            bc.transform.rotation,
             dungeonLayer,
             QueryTriggerInteraction.Collide
         );

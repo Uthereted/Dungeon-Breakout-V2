@@ -509,6 +509,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pieceType: 0
   stairDirection: 2
+  specialRoomType: 0
   entrance: {fileID: 7090683088816011184}
   exits: []
 --- !u!1 &6418774872059289972
@@ -859,8 +860,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.97, y: 10.8, z: 8.45}
-  m_Center: {x: 0, y: 2.5, z: 9.8}
+  m_Size: {x: 3.84, y: 10.8, z: 8.45}
+  m_Center: {x: -0.7, y: 2.5, z: 9.8}
 --- !u!1 &8456748878274478887
 GameObject:
   m_ObjectHideFlags: 0

@@ -28,11 +28,16 @@ public class PlayerCombat : MonoBehaviour
     bool queuedLight, queuedHeavy;
     float queuedLightUntil, queuedHeavyUntil;
 
+    PlayerController playerController;
+    PotionSystem potionSystem;
+
     void Awake()
     {
         if (!animator) animator = GetComponentInChildren<Animator>();
         if (!sword) sword = GetComponent<WeaponController>();
         if (!sword && transform.parent) sword = GetComponentInParent<WeaponController>();
+        playerController = GetComponent<PlayerController>();
+        potionSystem = GetComponent<PotionSystem>();
     }
 
     void Update()
@@ -58,6 +63,11 @@ public class PlayerCombat : MonoBehaviour
 
         // Activar/desactivar hitbox según estado de animación
         UpdateHitbox(st);
+
+        // Lock movement during attack animations (don't override if drinking/dead)
+        bool drinking = potionSystem != null && potionSystem.isDrinking;
+        if (playerController != null && !drinking)
+            playerController.movementLocked = IsAnyAttackState(st);
     }
 
     void UpdateHitbox(AnimatorStateInfo st)
@@ -110,7 +120,8 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    bool CanAttack() => sword != null && sword.HasWeapon && !sword.IsGrabbing;
+    bool CanAttack() => sword != null && sword.HasWeapon && !sword.IsGrabbing
+        && (potionSystem == null || !potionSystem.isDrinking);
     bool IsAnyAttackState(AnimatorStateInfo st) =>
         st.IsName(light1State) || st.IsName(light2State) ||
         st.IsName(heavy1State) || st.IsName(heavy2State);
