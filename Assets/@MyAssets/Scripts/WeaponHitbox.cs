@@ -7,7 +7,10 @@ public class WeaponHitbox : MonoBehaviour
     BoxCollider box;
     bool active;
     int damage;
-    HashSet<EnemyHealthDEMO> hitThisSwing = new HashSet<EnemyHealthDEMO>();
+    float knockback;
+    Transform attacker;
+    int currentSwingId = -1;
+    HashSet<EnemyHealth> hitThisSwing = new HashSet<EnemyHealth>();
 
     void Awake()
     {
@@ -15,39 +18,57 @@ public class WeaponHitbox : MonoBehaviour
         if (box) box.isTrigger = true;
     }
 
-    /// Llamado cada frame por PlayerCombat
-    public void SetActive(bool isAttacking, int dmg)
+    public void SetActive(bool isAttacking, int dmg, float kb = 0f, Transform source = null, int swingId = 0)
     {
-        if (isAttacking && !active)
+        if (isAttacking)
         {
-            // Empieza un nuevo swing
-            active = true;
+            // new swing detected — clear hits even if we were already active
+            if (swingId != currentSwingId)
+            {
+                currentSwingId = swingId;
+                hitThisSwing.Clear();
+            }
+
+            if (!active)
+            {
+                active = true;
+                if (box) box.enabled = true;
+            }
+
             damage = dmg;
-            hitThisSwing.Clear();
-            if (box) box.enabled = true;
+            knockback = kb;
+            attacker = source;
         }
-        else if (!isAttacking && active)
+        else if (active)
         {
-            // Termin� el ataque
             active = false;
+            currentSwingId = -1;
             hitThisSwing.Clear();
             if (box) box.enabled = false;
         }
-
-        // Actualizar da�o por si cambia entre light/heavy
-        if (active) damage = dmg;
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerStay(Collider other)
     {
         if (!active) return;
         if (((1 << other.gameObject.layer) & enemyMask.value) == 0) return;
 
-        var eh = other.GetComponentInParent<EnemyHealthDEMO>();
-        if (!eh) return;
+        var eh = other.GetComponentInParent<EnemyHealth>();
+        if (!eh || eh.IsDead) return;
         if (hitThisSwing.Contains(eh)) return;
 
         hitThisSwing.Add(eh);
         eh.TakeDamage(damage);
+
+        if (knockback > 0f && attacker != null)
+        {
+            var enemyRb = other.GetComponentInParent<Rigidbody>();
+            if (enemyRb && !enemyRb.isKinematic)
+            {
+                Vector3 dir = (other.transform.position - attacker.position).normalized;
+                dir.y = 0f;
+                enemyRb.AddForce(dir * knockback, ForceMode.Impulse);
+            }
+        }
     }
 }

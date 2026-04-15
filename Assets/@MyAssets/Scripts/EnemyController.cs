@@ -33,7 +33,7 @@ public class EnemyController : MonoBehaviour
     private float attackTimer;
     private bool isChasing;
     private float attackLockTimer;
-    private EnemyHealthDEMO health;
+    private EnemyHealth health;
 
     int SpeedHash = Animator.StringToHash("Speed");
     int IsChasingHash = Animator.StringToHash("IsChasing");
@@ -45,7 +45,7 @@ public class EnemyController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         agent.speed = patrolSpeed;
-        health = GetComponent<EnemyHealthDEMO>();
+        health = GetComponent<EnemyHealth>();
 
         if (animator == null) animator = GetComponentInChildren<Animator>();
 
