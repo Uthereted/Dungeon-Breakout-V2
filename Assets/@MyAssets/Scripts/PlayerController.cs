@@ -66,7 +66,6 @@ public class PlayerController : MonoBehaviour
 
     public void OnLook(InputValue v)
     {
-        if (movementLocked) { look = Vector2.zero; return; } // si quieres que tampoco rote
         look = v.Get<Vector2>();
     }
 
@@ -90,6 +89,7 @@ public class PlayerController : MonoBehaviour
         }
 
         UpdateAnimation();
+        UpdateCameraPitch();
     }
 
     void FixedUpdate()
@@ -163,7 +163,10 @@ public class PlayerController : MonoBehaviour
         float yaw = look.x * mouseSensitivity;
         Quaternion targetRot = Quaternion.Euler(0f, rb.rotation.eulerAngles.y + yaw, 0f);
         rb.MoveRotation(targetRot);
+    }
 
+    void UpdateCameraPitch()
+    {
         if (cameraPivot)
         {
             pitch -= look.y * mouseSensitivity;

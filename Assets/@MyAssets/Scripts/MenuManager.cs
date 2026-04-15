@@ -1,12 +1,19 @@
 using System.Collections;
 using UnityEngine;
 using Unity.Cinemachine;
+using TMPro;
 
 public class MenuManager : MonoBehaviour
 {
     [Header("UI")]
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject hud;
+
+    [Header("Interact Popup")]
+    [SerializeField] private GameObject interactRoot;
+    [SerializeField] private TMP_Text interactLabel;
+    [SerializeField] private Transform playerTransform;
+    [SerializeField] private Vector3 worldOffset = new Vector3(1f, 2f, 0f);
 
     [Header("Camera")]
     [SerializeField] private Camera mainCamera;
@@ -101,5 +108,28 @@ public class MenuManager : MonoBehaviour
     {
         Debug.Log("Salir");
         Application.Quit();
+    }
+
+    // --- Interact Popup ---
+
+    public void ShowInteract(string text)
+    {
+        if (interactLabel) interactLabel.text = text;
+        if (interactRoot) interactRoot.SetActive(true);
+    }
+
+    public void HideInteract()
+    {
+        if (interactRoot) interactRoot.SetActive(false);
+    }
+
+    private void LateUpdate()
+    {
+        if (interactRoot == null || !interactRoot.activeSelf) return;
+        if (playerTransform == null || mainCamera == null) return;
+
+        Vector3 screenPos = mainCamera.WorldToScreenPoint(playerTransform.position + worldOffset);
+        if (screenPos.z > 0)
+            interactRoot.transform.position = screenPos;
     }
 }

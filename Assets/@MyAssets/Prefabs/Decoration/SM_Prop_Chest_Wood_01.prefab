@@ -119,9 +119,10 @@ GameObject:
   - component: {fileID: 2322930}
   - component: {fileID: 64714773233862926}
   - component: {fileID: -2225596687970166244}
+  - component: {fileID: 559452977735312451}
   m_Layer: 0
   m_Name: SM_Prop_Chest_Wood_01
-  m_TagString: Untagged
+  m_TagString: Chest
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -229,9 +230,23 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.164745, y: 0.468608, z: 0.8101473}
+  m_Size: {x: 1.164745, y: 0.468608, z: 1.3}
   m_Center: {x: -0.00000029802322, y: 0.234304, z: -0.00000047683716}
+--- !u!114 &559452977735312451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fafc72cc844b09243a8b93b102c2aac8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  openTrigger: Open

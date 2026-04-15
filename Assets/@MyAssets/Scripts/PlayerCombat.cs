@@ -22,8 +22,8 @@ public class PlayerCombat : MonoBehaviour
     public float inputBufferTime = 0.35f;
 
     [Header("Damage (fallback if weapon has no Weapon script)")]
-    public int defaultLightDamage = 1;
-    public int defaultHeavyDamage = 2;
+    public int defaultLightDamage = 15;
+    public int defaultHeavyDamage = 30;
 
     bool queuedLight, queuedHeavy;
     float queuedLightUntil, queuedHeavyUntil;
@@ -64,10 +64,23 @@ public class PlayerCombat : MonoBehaviour
         // Activar/desactivar hitbox según estado de animación
         UpdateHitbox(st);
 
-        // Lock movement during attack animations (don't override if drinking/dead)
+        // Apply weapon attack speed to animator
+        if (sword && sword.HasWeapon && IsAnyAttackState(st))
+        {
+            var weapon = sword.EquippedWeapon;
+            animator.speed = weapon ? weapon.attackSpeed : 1f;
+        }
+        else if (!IsAnyAttackState(st) && Mathf.Abs(animator.speed - 1f) > 0.01f)
+        {
+            animator.speed = 1f;
+        }
+
+        // Lock movement during attack animations (don't override if drinking)
         bool drinking = potionSystem != null && potionSystem.isDrinking;
         if (playerController != null && !drinking)
             playerController.movementLocked = IsAnyAttackState(st);
+        else if (playerController != null && drinking)
+            playerController.movementLocked = true;
     }
 
     void UpdateHitbox(AnimatorStateInfo st)
@@ -82,8 +95,9 @@ public class PlayerCombat : MonoBehaviour
         int light = weapon ? weapon.lightDamage : defaultLightDamage;
         int heavy = weapon ? weapon.heavyDamage : defaultHeavyDamage;
         int dmg = IsHeavyState(st) ? heavy : light;
+        float kb = weapon ? weapon.knockbackForce : 0f;
 
-        hitbox.SetActive(inAttack, dmg);
+        hitbox.SetActive(inAttack, dmg, kb, transform, st.shortNameHash);
     }
 
     public void OnLightAttack(InputValue v)

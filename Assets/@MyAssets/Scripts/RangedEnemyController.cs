@@ -42,7 +42,7 @@ public class RangedEnemyController : MonoBehaviour
     public BoxCollider patrolArea;
 
     private NavMeshAgent agent;
-    private EnemyHealthDEMO health;
+    private EnemyHealth health;
     private State state = State.Patrol;
     private float waitTimer;
     private float attackTimer;
@@ -57,7 +57,7 @@ public class RangedEnemyController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         agent.speed = patrolSpeed;
-        health = GetComponent<EnemyHealthDEMO>();
+        health = GetComponent<EnemyHealth>();
 
         if (animator == null) animator = GetComponentInChildren<Animator>();
 

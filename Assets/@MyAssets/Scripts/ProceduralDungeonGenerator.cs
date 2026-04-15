@@ -179,24 +179,15 @@ public class ProceduralDungeonGenerator : MonoBehaviour
             (openConnectors[i], openConnectors[j]) = (openConnectors[j], openConnectors[i]);
         }
 
-        // Reservar conectores para salas especiales y colocarlas primero
-        int reserveCount = 0;
-        if (specialRoomRules != null)
-            foreach (var rule in specialRoomRules)
-                reserveCount += rule.maxCount;
+        // Place special rooms FIRST — they can try ALL open connectors
+        PlaceSpecialRooms(openConnectors);
 
-        var specialConnectors = openConnectors.GetRange(0, Mathf.Min(reserveCount, openConnectors.Count));
-        var normalConnectors = openConnectors.GetRange(specialConnectors.Count, openConnectors.Count - specialConnectors.Count);
-
-        // Cerrar conectores normales con salas normales
-        foreach (var (conn, mustCorr) in normalConnectors)
+        // Close remaining open connectors with normal rooms
+        foreach (var (conn, mustCorr) in openConnectors)
         {
             if (!conn.isConnected)
                 CloseWithRoom(conn, mustCorr);
         }
-
-        // Colocar salas especiales en los conectores reservados
-        PlaceSpecialRooms(specialConnectors);
 
     }
     IEnumerator BakeNavNextFrame()
@@ -229,6 +220,10 @@ public class ProceduralDungeonGenerator : MonoBehaviour
             if (enemyAgent != null && !enemyAgent.enabled)
                 enemyAgent.enabled = true;
         }
+
+        // setup escape system after everything is placed
+        if (DungeonEscape.Instance != null)
+            DungeonEscape.Instance.Setup();
     }
 
     void SpawnEnemiesInPieces()
@@ -644,8 +639,6 @@ public class ProceduralDungeonGenerator : MonoBehaviour
     {
         if (specialRoomRules == null || specialRoomRules.Length == 0) return;
 
-        int connIndex = 0;
-
         foreach (var rule in specialRoomRules)
         {
             if (rule.prefabs == null || rule.prefabs.Length == 0)
@@ -655,16 +648,16 @@ public class ProceduralDungeonGenerator : MonoBehaviour
             }
 
             int placed = 0;
-            while (placed < rule.maxCount && connIndex < connectors.Count)
-            {
-                var (conn, mustCorr) = connectors[connIndex];
-                connIndex++;
 
+            // Try every available connector until we've placed enough
+            for (int i = 0; i < connectors.Count && placed < rule.maxCount; i++)
+            {
+                var (conn, mustCorr) = connectors[i];
                 if (conn.isConnected) continue;
 
                 ConnectorPoint target = conn;
 
-                // Colocar corredor intermedio si es necesario
+                // Place intermediate corridor if needed
                 if (mustCorr)
                 {
                     GameObject corridorObj = TrySpawnAndAlign(corridorPrefabs, conn.transform);
@@ -689,8 +682,60 @@ public class ProceduralDungeonGenerator : MonoBehaviour
                 placed++;
             }
 
-            if (placed == 0)
-                Debug.LogWarning($"[DungeonGen] No se pudo colocar sala especial: {rule.type}");
+            // If still not enough, force-grow corridors from closed rooms to create new endpoints
+            if (placed < rule.maxCount)
+            {
+                Debug.LogWarning($"[DungeonGen] {rule.type}: only placed {placed}/{rule.maxCount}, force-growing corridors...");
+
+                // Find all connectors in the entire dungeon that are still open
+                var allPieces = NavRoot.GetComponentsInChildren<DungeonPiece>();
+                for (int p = allPieces.Length - 1; p >= 0 && placed < rule.maxCount; p--)
+                {
+                    var piece = allPieces[p];
+                    if (piece.exits == null) continue;
+
+                    foreach (var exit in piece.exits)
+                    {
+                        if (exit == null || exit.isConnected) continue;
+                        if (placed >= rule.maxCount) break;
+
+                        // Try placing directly
+                        GameObject directRoom = TrySpawnAndAlign(rule.prefabs, exit.transform);
+                        if (directRoom != null)
+                        {
+                            exit.isConnected = true;
+                            var rp = directRoom.GetComponent<DungeonPiece>();
+                            if (rp.entrance != null) rp.entrance.isConnected = true;
+                            TrackSpecialRoom(rp);
+                            placed++;
+                            continue;
+                        }
+
+                        // Try with a corridor first
+                        GameObject corridor = TrySpawnAndAlign(corridorPrefabs, exit.transform);
+                        if (corridor == null) continue;
+
+                        exit.isConnected = true;
+                        var cp = corridor.GetComponent<DungeonPiece>();
+                        if (cp.entrance != null) cp.entrance.isConnected = true;
+                        if (cp.exits == null || cp.exits.Length == 0) continue;
+
+                        GameObject roomObj = TrySpawnAndAlign(rule.prefabs, cp.exits[0].transform);
+                        if (roomObj == null) continue;
+
+                        cp.exits[0].isConnected = true;
+                        var rp2 = roomObj.GetComponent<DungeonPiece>();
+                        if (rp2.entrance != null) rp2.entrance.isConnected = true;
+                        TrackSpecialRoom(rp2);
+                        placed++;
+                    }
+                }
+            }
+
+            if (placed < rule.maxCount)
+                Debug.LogError($"[DungeonGen] FAILED to place {rule.type}: only {placed}/{rule.maxCount}");
+            else
+                Debug.Log($"[DungeonGen] Successfully placed {placed} {rule.type} rooms");
         }
     }
 
