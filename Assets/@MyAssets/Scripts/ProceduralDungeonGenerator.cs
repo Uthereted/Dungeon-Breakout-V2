@@ -57,11 +57,16 @@ public class ProceduralDungeonGenerator : MonoBehaviour
     public SpecialRoomRule[] specialRoomRules;
     private readonly Dictionary<SpecialRoomType, int> specialRoomCounts = new Dictionary<SpecialRoomType, int>();
 
+    [Header("Tapas de cierre")]
+    [Tooltip("Prefab que se coloca en cada conector abierto para cerrar la salida")]
+    public GameObject wallCapPrefab;
+
     [Header("Decoraciones")]
     public GameObject[] decorationPrefabs;
     [Range(0f, 1f)] public float decoSpawnChance = 0.8f;
     public LayerMask decoCollisionLayer;
     private readonly List<List<Transform>> decoSpawnPoints = new List<List<Transform>>();
+    private readonly List<DungeonPiece> placedPieces = new List<DungeonPiece>();
 
 
     // ---------------------------------------------------------------
@@ -105,6 +110,7 @@ public class ProceduralDungeonGenerator : MonoBehaviour
             }
 
             var firstPiece = first.GetComponent<DungeonPiece>();
+            if (firstPiece.entrance != null) firstPiece.entrance.isConnected = true;
             RegisterExits(firstPiece, mustBeCorridor: false, lastStair: firstPiece.stairDirection);
         }
 
@@ -144,11 +150,10 @@ public class ProceduralDungeonGenerator : MonoBehaviour
                 placeRoom = !placeRoom;
             }
 
-            // Si sigue sin poder, descartar conector
+            // Si sigue sin poder, descartar conector (dejar isConnected = false para que SealOpenConnectors lo cierre)
             if (spawned == null)
             {
                 Debug.LogWarning($"[DungeonGen] Conector descartado por colisiones.");
-                connector.isConnected = true;
                 continue;
             }
 
@@ -189,6 +194,8 @@ public class ProceduralDungeonGenerator : MonoBehaviour
                 CloseWithRoom(conn, mustCorr);
         }
 
+        // Seal every exit that is still open with a wall cap
+        SealOpenConnectors();
     }
     IEnumerator BakeNavNextFrame()
     {
@@ -398,6 +405,7 @@ public class ProceduralDungeonGenerator : MonoBehaviour
             Physics.SyncTransforms();
 
             placedCount++;
+            placedPieces.Add(piece);
 
             EnemySetup roomSetup = obj.GetComponent<EnemySetup>();
             if (roomSetup != null)
@@ -544,10 +552,7 @@ public class ProceduralDungeonGenerator : MonoBehaviour
         if (rp.entrance != null) rp.entrance.isConnected = true;
 
         TrackSpecialRoom(rp);
-
-        if (rp.exits != null)
-            foreach (var exit in rp.exits)
-                if (exit != null) exit.isConnected = true;
+        // Las salidas de la sala final se dejan abiertas para que SealOpenConnectors las cierre
     }
 
     // ---------------------------------------------------------------
@@ -736,6 +741,39 @@ public class ProceduralDungeonGenerator : MonoBehaviour
                 Debug.LogError($"[DungeonGen] FAILED to place {rule.type}: only {placed}/{rule.maxCount}");
             else
                 Debug.Log($"[DungeonGen] Successfully placed {placed} {rule.type} rooms");
+        }
+    }
+
+    // ---------------------------------------------------------------
+    // Cierra todos los conectores abiertos con el wallCapPrefab
+    // ---------------------------------------------------------------
+    void SealOpenConnectors()
+    {
+        if (wallCapPrefab == null) return;
+
+        // Solo recorrer piezas que se colocaron con éxito, no las destruidas por colisión
+        foreach (DungeonPiece piece in placedPieces)
+        {
+            // Sellar entrada si está abierta
+            if (piece.entrance != null && !piece.entrance.isConnected)
+            {
+                Instantiate(wallCapPrefab, piece.entrance.transform.position,
+                    Quaternion.LookRotation(piece.entrance.transform.forward, Vector3.up), NavRoot);
+                piece.entrance.isConnected = true;
+                Debug.Log($"[DungeonGen] Entrada sellada en {piece.name}");
+            }
+
+            // Sellar salidas abiertas
+            if (piece.exits == null) continue;
+            foreach (ConnectorPoint exit in piece.exits)
+            {
+                if (exit == null || exit.isConnected) continue;
+
+                Instantiate(wallCapPrefab, exit.transform.position,
+                    Quaternion.LookRotation(exit.transform.forward, Vector3.up), NavRoot);
+                exit.isConnected = true;
+                Debug.Log($"[DungeonGen] Salida sellada en {piece.name}");
+            }
         }
     }
 
