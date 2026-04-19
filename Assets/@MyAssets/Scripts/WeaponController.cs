@@ -37,143 +37,92 @@ public class WeaponController : MonoBehaviour
     {
         if (!v.isPressed || grabbing) return;
 
-        // chest interaction
         if (nearbyChest != null && !nearbyChest.IsOpened)
+            StartCoroutine(InteractRoutine(nearbyChest.transform, () => nearbyChest?.Open()));
+        else if (nearbyWeapon != null && equippedWeaponTransform == null)
         {
-            StartCoroutine(LootRoutine());
-            return;
+            Transform weapon = nearbyWeapon;
+            StartCoroutine(InteractRoutine(weapon, () => EquipWeapon(weapon)));
         }
-
-        // weapon pickup
-        if (nearbyWeapon == null || equippedWeaponTransform != null) return;
-        StartCoroutine(GrabRoutine());
     }
 
-    IEnumerator GrabRoutine()
+    IEnumerator InteractRoutine(Transform target, System.Action onComplete)
     {
         grabbing = true;
-        Transform target = nearbyWeapon;   // cache so OnTriggerExit can't null it
         nearbyWeapon = null;
-
-        if (menuManager) menuManager.HideInteract();
-        if (player) player.movementLocked = true;
-
-        // smoothly rotate player to face the weapon before the animation starts
-        if (target)
-        {
-            Vector3 dir = target.position - transform.position;
-            dir.y = 0f;
-            if (dir.sqrMagnitude > 0.001f)
-            {
-                Quaternion targetRot = Quaternion.LookRotation(dir);
-                while (Quaternion.Angle(transform.rotation, targetRot) > 1f)
-                {
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, turnSpeed * Time.deltaTime);
-                    yield return null;
-                }
-                transform.rotation = targetRot;
-            }
-        }
-
-        if (animator) animator.SetTrigger(grabTrigger);
-        yield return new WaitForSeconds(grabDuration);
-        EquipWeapon(target);
-        grabbing = false;
-        if (player) player.movementLocked = false;
-    }
-
-    IEnumerator LootRoutine()
-    {
-        grabbing = true;
-        Chest chest = nearbyChest;
         nearbyChest = null;
 
         if (menuManager) menuManager.HideInteract();
         if (player) player.movementLocked = true;
 
-        // turn toward chest
-        if (chest)
-        {
-            Vector3 dir = chest.transform.position - transform.position;
-            dir.y = 0f;
-            if (dir.sqrMagnitude > 0.001f)
-            {
-                Quaternion targetRot = Quaternion.LookRotation(dir);
-                while (Quaternion.Angle(transform.rotation, targetRot) > 1f)
-                {
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, turnSpeed * Time.deltaTime);
-                    yield return null;
-                }
-                transform.rotation = targetRot;
-            }
-        }
+        if (target) yield return TurnTo(target.position);
 
-        // play pickup animation
         if (animator) animator.SetTrigger(grabTrigger);
         yield return new WaitForSeconds(grabDuration);
 
-        // open chest after animation
-        if (chest) chest.Open();
+        onComplete?.Invoke();
 
         grabbing = false;
         if (player) player.movementLocked = false;
     }
 
-    void EquipWeapon(Transform sword)
+    IEnumerator TurnTo(Vector3 worldPos)
     {
-        if (!sword) return;
+        Vector3 dir = worldPos - transform.position;
+        dir.y = 0f;
+        if (dir.sqrMagnitude < 0.001f) yield break;
 
-        var rb = sword.GetComponent<Rigidbody>();
+        Quaternion targetRot = Quaternion.LookRotation(dir);
+        while (Quaternion.Angle(transform.rotation, targetRot) > 1f)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, turnSpeed * Time.deltaTime);
+            yield return null;
+        }
+        transform.rotation = targetRot;
+    }
+
+    void EquipWeapon(Transform weapon)
+    {
+        if (!weapon) return;
+
+        // Disable physics
+        var rb = weapon.GetComponent<Rigidbody>();
         if (rb) rb.isKinematic = true;
 
-        SphereCollider grabCol = sword.GetComponent<SphereCollider>();
-        if (!grabCol) grabCol = sword.GetComponentInChildren<SphereCollider>(true);
-        if (grabCol) grabCol.enabled = false;
+        // Disable pickup trigger
+        var pickCol = weapon.GetComponentInChildren<SphereCollider>(true);
+        if (pickCol) pickCol.enabled = false;
 
-        BoxCollider hitCol = sword.GetComponent<BoxCollider>();
-        if (!hitCol) hitCol = sword.GetComponentInChildren<BoxCollider>(true);
+        // Prepare hit collider (off until attacking)
+        var hitCol = weapon.GetComponentInChildren<BoxCollider>(true);
         if (hitCol)
         {
             hitCol.isTrigger = true;
             hitCol.enabled = false;
         }
 
-        sword.SetParent(weaponSocket);
+        // Attach to hand using weapon's grip offset
+        Weapon w = weapon.GetComponent<Weapon>();
+        weapon.SetParent(weaponSocket);
+        weapon.localPosition = w ? w.gripPosition : Vector3.zero;
+        weapon.localRotation = w ? Quaternion.Euler(w.gripRotation) : Quaternion.identity;
 
-        Weapon w = sword.GetComponent<Weapon>();
-        if (w != null)
-        {
-            sword.localPosition = w.gripPosition;
-            sword.localRotation = Quaternion.Euler(w.gripRotation);
-        }
-        else
-        {
-            sword.localPosition = Vector3.zero;
-            sword.localRotation = Quaternion.identity;
-        }
-
-        equippedWeaponTransform = sword;
-        equippedWeapon = w;
-        nearbyWeapon = null;
-
-        // Swap animations if this weapon has its own override controller
-        if (w != null && w.animatorOverride != null && animator != null)
+        // Swap animations if this weapon has its own override
+        if (w && w.animatorOverride && animator)
             animator.runtimeAnimatorController = w.animatorOverride;
+
+        equippedWeaponTransform = weapon;
+        equippedWeapon = w;
     }
 
     void OnTriggerEnter(Collider other)
     {
-        // weapon pickup
-        if (other.CompareTag("SwordPick"))
+        if (other.CompareTag("SwordPick") && equippedWeaponTransform == null && !grabbing)
         {
-            if (equippedWeaponTransform != null || grabbing) return;
             nearbyWeapon = other.transform;
             if (menuManager) menuManager.ShowInteract(grabText);
-            return;
         }
-
-        // chest interaction
-        if (other.CompareTag("Chest"))
+        else if (other.CompareTag("Chest"))
         {
             var chest = other.GetComponentInParent<Chest>();
             if (chest && !chest.IsOpened)
@@ -181,24 +130,17 @@ public class WeaponController : MonoBehaviour
                 nearbyChest = chest;
                 if (menuManager) menuManager.ShowInteract("Loot [F]");
             }
-            return;
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        // weapon
-        if (other.CompareTag("SwordPick"))
+        if (other.CompareTag("SwordPick") && !grabbing && nearbyWeapon == other.transform)
         {
-            if (grabbing) return;
-            if (nearbyWeapon != other.transform) return;
             nearbyWeapon = null;
             if (menuManager) menuManager.HideInteract();
-            return;
         }
-
-        // chest
-        if (other.CompareTag("Chest"))
+        else if (other.CompareTag("Chest"))
         {
             var chest = other.GetComponentInParent<Chest>();
             if (chest == nearbyChest)
@@ -206,7 +148,6 @@ public class WeaponController : MonoBehaviour
                 nearbyChest = null;
                 if (menuManager) menuManager.HideInteract();
             }
-            return;
         }
     }
 }
