@@ -25,4 +25,14 @@ public class Weapon : MonoBehaviour
 
     [Header("Knockback")]
     public float knockbackForce = 0f;
+
+    [Header("Hand Grip Offset")]
+    [Tooltip("Local position offset relative to the hand socket")]
+    public Vector3 gripPosition = Vector3.zero;
+    [Tooltip("Local euler rotation offset relative to the hand socket")]
+    public Vector3 gripRotation = Vector3.zero;
+
+    [Header("Animations")]
+    [Tooltip("Optional: override controller for this weapon's animations. Leave empty to use the player's default animator.")]
+    public AnimatorOverrideController animatorOverride;
 }

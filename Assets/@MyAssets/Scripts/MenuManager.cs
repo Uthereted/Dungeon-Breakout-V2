@@ -11,6 +11,7 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject mainMenu;
     [SerializeField] private GameObject hud;
     [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject dieMenu;
 
     [Header("Pausa")]
     [SerializeField] private string mainMenuScene = "TitleScreen";
@@ -30,10 +31,14 @@ public class MenuManager : MonoBehaviour
     [Header("Player")]
     [SerializeField] private PlayerController playerController;
 
+    [Header("Tiempo")]
+    [SerializeField] private GameTimer gameTimer;
+
     private CinemachineBrain cinemachineBrain;
     private bool starting;
     private bool isPaused;
     private bool gameStarted;
+    private bool isDead;
 
     private void Start()
     {
@@ -41,6 +46,7 @@ public class MenuManager : MonoBehaviour
         Cursor.visible = true;
 
         if (pauseMenu != null) pauseMenu.SetActive(false);
+        if (dieMenu != null) dieMenu.SetActive(false);
         if (mainMenu != null) mainMenu.SetActive(true);
         if (hud != null) hud.SetActive(false);
 
@@ -86,6 +92,8 @@ public class MenuManager : MonoBehaviour
 
         SetGameplayActive(true);
         gameStarted = true;
+
+        if (gameTimer != null) gameTimer.StartTimer();
     }
 
     public void OnExitPressed()
@@ -97,11 +105,23 @@ public class MenuManager : MonoBehaviour
 
     private void Update()
     {
-        if (gameStarted && Keyboard.current.escapeKey.wasPressedThisFrame)
+        if (gameStarted && !isDead && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             if (isPaused) OnResumePressed();
             else Pause();
         }
+    }
+
+    public void ShowDieMenu()
+    {
+        if (isDead) return;
+        isDead = true;
+
+        SetGameplayActive(false);
+        if (gameTimer != null) gameTimer.StopTimer();
+
+        if (dieMenu != null) dieMenu.SetActive(true);
+        if (hud != null) hud.SetActive(false);
     }
 
     void Pause()

@@ -168,6 +168,10 @@ namespace DungeonBreakoutV2
             // Play death animation
             var animator = player.GetComponentInChildren<Animator>();
             if (animator) animator.SetTrigger(dieTrigger);
+
+            // Show die menu
+            var menu = FindObjectOfType<MenuManager>();
+            if (menu) menu.ShowDieMenu();
         }
     }
 }

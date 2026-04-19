@@ -139,11 +139,26 @@ public class WeaponController : MonoBehaviour
         }
 
         sword.SetParent(weaponSocket);
-        sword.localPosition = Vector3.zero;
-        sword.localRotation = Quaternion.identity;
+
+        Weapon w = sword.GetComponent<Weapon>();
+        if (w != null)
+        {
+            sword.localPosition = w.gripPosition;
+            sword.localRotation = Quaternion.Euler(w.gripRotation);
+        }
+        else
+        {
+            sword.localPosition = Vector3.zero;
+            sword.localRotation = Quaternion.identity;
+        }
+
         equippedWeaponTransform = sword;
-        equippedWeapon = sword.GetComponent<Weapon>();
+        equippedWeapon = w;
         nearbyWeapon = null;
+
+        // Swap animations if this weapon has its own override controller
+        if (w != null && w.animatorOverride != null && animator != null)
+            animator.runtimeAnimatorController = w.animatorOverride;
     }
 
     void OnTriggerEnter(Collider other)
