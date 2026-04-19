@@ -15,11 +15,20 @@ public class WeaponController : MonoBehaviour
     public float grabDuration = 1.0f;
     public float turnSpeed = 5f;
     public string grabText = "Grab [F]";
+    public string swapText = "Swap [F]";
 
     Transform equippedWeaponTransform, nearbyWeapon;
     Weapon equippedWeapon;
     Chest nearbyChest;
     bool grabbing;
+
+    // Stored for returning a dropped weapon to its original spot
+    Vector3 droppedPosition;
+    Quaternion droppedRotation;
+    Transform droppedParent;
+
+    // Default animator controller (so we can restore it when no weapon has an override)
+    RuntimeAnimatorController defaultAnimatorController;
 
     public bool HasWeapon => equippedWeaponTransform != null;
     public bool IsGrabbing => grabbing;
@@ -31,6 +40,8 @@ public class WeaponController : MonoBehaviour
         if (!menuManager) menuManager = FindAnyObjectByType<MenuManager>();
         if (!animator) animator = GetComponentInChildren<Animator>();
         if (!player) player = GetComponentInParent<PlayerController>();
+
+        if (animator) defaultAnimatorController = animator.runtimeAnimatorController;
     }
 
     public void OnInteract(InputValue v)
@@ -39,10 +50,14 @@ public class WeaponController : MonoBehaviour
 
         if (nearbyChest != null && !nearbyChest.IsOpened)
             StartCoroutine(InteractRoutine(nearbyChest.transform, () => nearbyChest?.Open()));
-        else if (nearbyWeapon != null && equippedWeaponTransform == null)
+        else if (nearbyWeapon != null)
         {
             Transform weapon = nearbyWeapon;
-            StartCoroutine(InteractRoutine(weapon, () => EquipWeapon(weapon)));
+            StartCoroutine(InteractRoutine(weapon, () =>
+            {
+                if (equippedWeaponTransform != null) DropEquippedWeapon();
+                EquipWeapon(weapon);
+            }));
         }
     }
 
@@ -85,6 +100,11 @@ public class WeaponController : MonoBehaviour
     {
         if (!weapon) return;
 
+        // Remember the spot the weapon is sitting at, so it can be returned later
+        droppedPosition = weapon.position;
+        droppedRotation = weapon.rotation;
+        droppedParent = weapon.parent;
+
         // Disable physics
         var rb = weapon.GetComponent<Rigidbody>();
         if (rb) rb.isKinematic = true;
@@ -107,20 +127,51 @@ public class WeaponController : MonoBehaviour
         weapon.localPosition = w ? w.gripPosition : Vector3.zero;
         weapon.localRotation = w ? Quaternion.Euler(w.gripRotation) : Quaternion.identity;
 
-        // Swap animations if this weapon has its own override
-        if (w && w.animatorOverride && animator)
-            animator.runtimeAnimatorController = w.animatorOverride;
+        // Swap animations
+        if (animator)
+        {
+            if (w && w.animatorOverride)
+                animator.runtimeAnimatorController = w.animatorOverride;
+            else if (defaultAnimatorController)
+                animator.runtimeAnimatorController = defaultAnimatorController;
+        }
 
         equippedWeaponTransform = weapon;
         equippedWeapon = w;
     }
 
+    void DropEquippedWeapon()
+    {
+        if (!equippedWeaponTransform) return;
+
+        Transform weapon = equippedWeaponTransform;
+
+        // Return to original location
+        weapon.SetParent(droppedParent);
+        weapon.position = droppedPosition;
+        weapon.rotation = droppedRotation;
+
+        // Re-enable pickup
+        var pickCol = weapon.GetComponentInChildren<SphereCollider>(true);
+        if (pickCol) pickCol.enabled = true;
+
+        // Disable hit collider
+        var hitCol = weapon.GetComponentInChildren<BoxCollider>(true);
+        if (hitCol) hitCol.enabled = false;
+
+        equippedWeaponTransform = null;
+        equippedWeapon = null;
+    }
+
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("SwordPick") && equippedWeaponTransform == null && !grabbing)
+        if (other.CompareTag("SwordPick") && !grabbing)
         {
+            // Don't show pickup prompt for the weapon we're already holding
+            if (equippedWeaponTransform == other.transform) return;
+
             nearbyWeapon = other.transform;
-            if (menuManager) menuManager.ShowInteract(grabText);
+            if (menuManager) menuManager.ShowInteract(equippedWeaponTransform != null ? swapText : grabText);
         }
         else if (other.CompareTag("Chest"))
         {

@@ -7,5 +7,13 @@ AnimatorOverrideController:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: AxeOverride
-  m_Controller: {fileID: 0}
-  m_Clips: []
+  m_Controller: {fileID: 9100000, guid: fa82b9d03b84c3e47b5c625d84e7db72, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 3094330708855449807, guid: 6144503243b42eb4391b7367fa90cfe7, type: 3}
+    m_OverrideClip: {fileID: 3094330708855449807, guid: bec8a2b0908e81b48b1c320183c56bdd, type: 3}
+  - m_OriginalClip: {fileID: 3094330708855449807, guid: 50399cb667ac0164a8802f1ba156806f, type: 3}
+    m_OverrideClip: {fileID: 3094330708855449807, guid: 15ba8fca86356454b98c471d643f60f1, type: 3}
+  - m_OriginalClip: {fileID: 3094330708855449807, guid: a0ebc2375cc6abb4eb0c111cf225800a, type: 3}
+    m_OverrideClip: {fileID: 3094330708855449807, guid: 3724986c99df8594bbb046fe82fc22a8, type: 3}
+  - m_OriginalClip: {fileID: 3094330708855449807, guid: f05262435b4d6374999ffde2bf3e8283, type: 3}
+    m_OverrideClip: {fileID: 3094330708855449807, guid: 8a92a1c631b8d804b979ca63ab7f908c, type: 3}

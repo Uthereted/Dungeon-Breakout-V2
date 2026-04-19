@@ -56,9 +56,6 @@ public class PlayerController : MonoBehaviour
         sprintAction = playerInput.actions["Sprint"];
 
         if (animator == null) animator = GetComponentInChildren<Animator>();
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     public void OnMove(InputValue v)

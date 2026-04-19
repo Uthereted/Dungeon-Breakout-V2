@@ -62,7 +62,8 @@ public class MenuManager : MonoBehaviour
             mainCamera.transform.rotation = menuCameraPoint.rotation;
         }
 
-        if (playerController != null) playerController.enabled = false;
+        // Freeze the entire game until Start is pressed
+        Time.timeScale = 0f;
     }
 
     public void OnStartPressed()
@@ -81,7 +82,7 @@ public class MenuManager : MonoBehaviour
 
         while (t < 1f)
         {
-            t += Time.deltaTime / moveDuration;
+            t += Time.unscaledDeltaTime / moveDuration;
             mainCamera.transform.position = Vector3.Lerp(initialPos, startCameraPoint.position, t);
             mainCamera.transform.rotation = Quaternion.Slerp(initialRot, startCameraPoint.rotation, t);
             yield return null;
@@ -89,6 +90,9 @@ public class MenuManager : MonoBehaviour
 
         if (mainMenu != null) mainMenu.SetActive(false);
         if (hud != null) hud.SetActive(true);
+
+        // Unfreeze the game now that gameplay starts
+        Time.timeScale = 1f;
 
         SetGameplayActive(true);
         gameStarted = true;
