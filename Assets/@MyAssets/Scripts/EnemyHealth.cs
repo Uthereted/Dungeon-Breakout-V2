@@ -15,6 +15,11 @@ public class EnemyHealth : MonoBehaviour
     public string dieTrigger = "Die";
     public string isDeadBool = "IsDead";
 
+    [Header("Hit FX")]
+    public GameObject bloodPrefab;
+    public Vector3 bloodOffset = new Vector3(0f, 1.2f, 0f);
+    public float bloodLifetime = 2f;
+
     [Header("Healthbar")]
     public Vector3 barOffset = new Vector3(0f, 2.2f, 0f);
     public Vector2 barSize = new Vector2(1f, 0.12f);
@@ -152,7 +157,17 @@ public class EnemyHealth : MonoBehaviour
         if (!dead && health.IsAlive)
         {
             if (animator) animator.SetTrigger(hitTrigger);
+            SpawnBloodFX();
         }
+    }
+
+    void SpawnBloodFX()
+    {
+        if (bloodPrefab == null) return;
+
+        Vector3 pos = transform.position + transform.TransformVector(bloodOffset);
+        GameObject fx = Instantiate(bloodPrefab, pos, Quaternion.identity, transform);
+        if (bloodLifetime > 0f) Destroy(fx, bloodLifetime);
     }
 
     void Die()

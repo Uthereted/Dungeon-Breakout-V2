@@ -49,7 +49,10 @@ public class WeaponController : MonoBehaviour
         if (!v.isPressed || grabbing) return;
 
         if (nearbyChest != null && !nearbyChest.IsOpened)
-            StartCoroutine(InteractRoutine(nearbyChest.transform, () => nearbyChest?.Open()));
+        {
+            Chest chest = nearbyChest;
+            StartCoroutine(InteractRoutine(chest.transform, () => chest.Open()));
+        }
         else if (nearbyWeapon != null)
         {
             Transform weapon = nearbyWeapon;

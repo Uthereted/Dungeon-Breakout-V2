@@ -17,6 +17,7 @@ public class DungeonEscape : MonoBehaviour
 
     // auto-discovered at runtime
     GameObject portalBlocker;
+    GameObject portalFX;
 
     public int ChestsLooted => chestsLooted;
     public int ChestsRequired => chestsRequired;
@@ -58,6 +59,14 @@ public class DungeonEscape : MonoBehaviour
                     portalBlocker.SetActive(true);
                 }
 
+                // look for a child named "PortalFX" — hidden while locked, shown when unlocked
+                Transform fx = piece.transform.Find("PortalFX");
+                if (fx != null)
+                {
+                    portalFX = fx.gameObject;
+                    portalFX.SetActive(false);
+                }
+
                 // add EscapePortal trigger if not already present
                 Transform portalTrigger = piece.transform.Find("PortalTrigger");
                 if (portalTrigger != null && portalTrigger.GetComponent<EscapePortal>() == null)
@@ -81,6 +90,7 @@ public class DungeonEscape : MonoBehaviour
     {
         Debug.Log("[DungeonEscape] Portal unlocked!");
         if (portalBlocker) portalBlocker.SetActive(false);
+        if (portalFX) portalFX.SetActive(true);
     }
 
     public void Escape()

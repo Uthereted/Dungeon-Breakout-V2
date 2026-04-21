@@ -6451,6 +6451,9 @@ MonoBehaviour:
   hitTrigger: Hit
   dieTrigger: Die
   isDeadBool: IsDead
+  bloodPrefab: {fileID: 1026642433091512, guid: 2206e643572ce884a9e8a7afff71d668, type: 3}
+  bloodOffset: {x: 0, y: 1.2, z: 0}
+  bloodLifetime: 2
   barOffset: {x: 0, y: 2.2, z: 0}
   barSize: {x: 1, y: 0.12}
   barBackground: {r: 0.2, g: 0.2, b: 0.2, a: 0.8}
@@ -8350,6 +8353,9 @@ MonoBehaviour:
   hitTrigger: Hit
   dieTrigger: Die
   isDeadBool: IsDead
+  bloodPrefab: {fileID: 1026642433091512, guid: 2206e643572ce884a9e8a7afff71d668, type: 3}
+  bloodOffset: {x: 0, y: 1.2, z: 0}
+  bloodLifetime: 2
   barOffset: {x: 0, y: 2, z: 0}
   barSize: {x: 1, y: 0.12}
   barBackground: {r: 0.2, g: 0.2, b: 0.2, a: 0.8}
@@ -25757,6 +25763,10 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  hitTrigger: Hit
+  bloodPrefab: {fileID: 1026642433091512, guid: e8436df6bb308a44e97ca633415146b8, type: 3}
+  bloodOffset: {x: 0, y: 1.2, z: 0}
+  bloodLifetime: 2
 --- !u!114 &1069017165
 MonoBehaviour:
   m_ObjectHideFlags: 0

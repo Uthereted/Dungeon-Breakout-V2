@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(awk '/^GameObject:$/{inGO=1; next} inGO && /m_Name:/{name=$2; inGO=0} /^Transform:$/{inT=1; next} inT && /m_GameObject:/{tgo=$0; next} inT && /m_Father:/{print name, \"father:\", $0; inT=0; name=\"\"}' Assets/@MyAssets/Scene/ExitRoom.prefab)"
+    ]
+  }
+}

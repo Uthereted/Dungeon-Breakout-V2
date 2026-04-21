@@ -28,6 +28,12 @@ namespace DungeonBreakoutV2
         public float groundOffset = 0.02f;
         public LayerMask groundMask = ~0;
 
+        [Header("Hit Reaction")]
+        public string hitTrigger = "Hit";
+        public GameObject bloodPrefab;
+        public Vector3 bloodOffset = new Vector3(0f, 1.2f, 0f);
+        public float bloodLifetime = 2f;
+
         public bool IsDead { get; private set; }
 
         private void Awake()
@@ -100,7 +106,31 @@ namespace DungeonBreakoutV2
             UpdateGraphics();
 
             if (hitPoint <= 0f)
+            {
                 PlayerDied();
+            }
+            else
+            {
+                PlayHitReaction();
+            }
+        }
+
+        private void PlayHitReaction()
+        {
+            if (player == null) return;
+
+            if (!string.IsNullOrEmpty(hitTrigger))
+            {
+                var animator = player.GetComponentInChildren<Animator>();
+                if (animator) animator.SetTrigger(hitTrigger);
+            }
+
+            if (bloodPrefab != null)
+            {
+                Vector3 pos = player.transform.position + player.transform.TransformVector(bloodOffset);
+                GameObject fx = Instantiate(bloodPrefab, pos, Quaternion.identity, player.transform);
+                if (bloodLifetime > 0f) Destroy(fx, bloodLifetime);
+            }
         }
 
         public void HealDamage(float heal)
