@@ -6739,6 +6739,8 @@ MonoBehaviour:
   gripPosition: {x: 0, y: 0.0098, z: 0.6834}
   gripRotation: {x: -87.429, y: 0.001, z: -0.001}
   animatorOverride: {fileID: 22100000, guid: a1b7819c0dbb9eb4a980ea11b6dc049f, type: 2}
+  attackSfx: {fileID: 8300000, guid: 0ab4ba2455fdfcc4398c7a202be7ccb1, type: 3}
+  attackSfxVolume: 1
 --- !u!114 &286534389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8236,6 +8238,8 @@ MonoBehaviour:
   minWaitTime: 1.5
   maxWaitTime: 4
   damage: 15
+  attackSfx: {fileID: 8300000, guid: 41f6a0b4571af0e4482a98a916c42135, type: 3}
+  attackSfxVolume: 1
   animDamp: 0.12
   attackLockTime: 1.8
   hitDelay: 1
@@ -23941,6 +23945,8 @@ MonoBehaviour:
   gripPosition: {x: 0, y: 0, z: 0}
   gripRotation: {x: 0, y: 0, z: 0}
   animatorOverride: {fileID: 0}
+  attackSfx: {fileID: 8300000, guid: bf35d06384dc7af4598fc7c26699259c, type: 3}
+  attackSfxVolume: 1
 --- !u!1001 &1001902406
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26384,6 +26390,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1112480054}
   - component: {fileID: 1112480053}
+  - component: {fileID: 1112480055}
   m_Layer: 0
   m_Name: MenuManager
   m_TagString: Untagged
@@ -26438,6 +26445,25 @@ Transform:
   - {fileID: 1423221294}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1112480055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112480052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19f5ee5b49179734284a39e254ab2aff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuMusic: {fileID: 8300000, guid: 56d6a1392a3e6a940a89f7e349728d74, type: 3}
+  gameplayTracks:
+  - {fileID: 8300000, guid: 96ce2afe6619de34c9245a50a2c78d31, type: 3}
+  - {fileID: 8300000, guid: f21d74d516860fa48b0d9aba89659ae5, type: 3}
+  - {fileID: 8300000, guid: 8558b822915d5974b8065128684082cb, type: 3}
+  - {fileID: 8300000, guid: a8630c35eba646f4493b9614c93451c4, type: 3}
+  volume: 0.1
 --- !u!1001 &1113648580
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39184,6 +39210,8 @@ MonoBehaviour:
   gripPosition: {x: 0.0078, y: -0.0157, z: 0.2806}
   gripRotation: {x: -248.26, y: -128.98, z: 49.0529}
   animatorOverride: {fileID: 22100000, guid: 9d8b7af5fb1246a4b80df48182b6e881, type: 2}
+  attackSfx: {fileID: 8300000, guid: 7fa7dbbb753d4d048850d3ba9013efcb, type: 3}
+  attackSfxVolume: 1
 --- !u!65 &1598615335
 BoxCollider:
   m_ObjectHideFlags: 0

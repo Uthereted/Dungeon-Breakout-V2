@@ -27,6 +27,7 @@ public class PlayerCombat : MonoBehaviour
 
     bool queuedLight, queuedHeavy;
     float queuedLightUntil, queuedHeavyUntil;
+    int lastAttackStateHash;
 
     PlayerController playerController;
     PotionSystem potionSystem;
@@ -59,6 +60,20 @@ public class PlayerCombat : MonoBehaviour
         {
             queuedHeavy = false;
             animator.SetTrigger(heavyTrigger);
+        }
+
+        // Play weapon SFX exactly once per attack-state entry
+        if (IsAnyAttackState(st))
+        {
+            if (st.shortNameHash != lastAttackStateHash)
+            {
+                lastAttackStateHash = st.shortNameHash;
+                PlayWeaponSfx();
+            }
+        }
+        else
+        {
+            lastAttackStateHash = 0;
         }
 
         // Activar/desactivar hitbox según estado de animación
@@ -132,6 +147,19 @@ public class PlayerCombat : MonoBehaviour
             queuedHeavy = true;
             queuedHeavyUntil = Time.time + inputBufferTime;
         }
+    }
+
+    void PlayWeaponSfx()
+    {
+        if (sword == null) return;
+        var weapon = sword.EquippedWeapon;
+        if (weapon == null || weapon.attackSfx == null) return;
+
+        Vector3 pos = sword.EquippedWeaponTransform != null
+            ? sword.EquippedWeaponTransform.position
+            : transform.position;
+
+        AudioSource.PlayClipAtPoint(weapon.attackSfx, pos, weapon.attackSfxVolume);
     }
 
     bool CanAttack() => sword != null && sword.HasWeapon && !sword.IsGrabbing

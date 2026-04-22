@@ -50,6 +50,8 @@ public class MenuManager : MonoBehaviour
         if (mainMenu != null) mainMenu.SetActive(true);
         if (hud != null) hud.SetActive(false);
 
+        if (MusicManager.Instance != null) MusicManager.Instance.PlayMenuMusic();
+
         if (mainCamera != null)
         {
             cinemachineBrain = mainCamera.GetComponent<CinemachineBrain>();
@@ -98,6 +100,7 @@ public class MenuManager : MonoBehaviour
         gameStarted = true;
 
         if (gameTimer != null) gameTimer.StartTimer();
+        if (MusicManager.Instance != null) MusicManager.Instance.PlayGameplayMusic();
     }
 
     public void OnExitPressed()
@@ -126,6 +129,8 @@ public class MenuManager : MonoBehaviour
 
         if (dieMenu != null) dieMenu.SetActive(true);
         if (hud != null) hud.SetActive(false);
+
+        if (MusicManager.Instance != null) MusicManager.Instance.PlayMenuMusic();
     }
 
     void Pause()
@@ -150,6 +155,7 @@ public class MenuManager : MonoBehaviour
 
     public void OnRetryPressed()
     {
+        if (pauseMenu != null) pauseMenu.SetActive(false);
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }

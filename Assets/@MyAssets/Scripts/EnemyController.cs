@@ -23,6 +23,10 @@ public class EnemyController : MonoBehaviour
     [Header("Damage")]
     public float damage = 15f;
 
+    [Header("SFX")]
+    public AudioClip attackSfx;
+    [Range(0f, 1f)] public float attackSfxVolume = 1f;
+
     [Header("Animación")]
     public float animDamp = 0.12f;
     public float attackLockTime = 0.7f;
@@ -246,6 +250,9 @@ public class EnemyController : MonoBehaviour
         if (dist <= attackRange + 0.2f)
         {
             HealthSystem.Instance.TakeDamage(damage);
+
+            if (attackSfx != null)
+                AudioSource.PlayClipAtPoint(attackSfx, transform.position, attackSfxVolume);
         }
     }
 

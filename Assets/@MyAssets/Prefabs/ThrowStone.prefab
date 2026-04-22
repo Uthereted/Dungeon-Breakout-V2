@@ -171,4 +171,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   lifetime: 5
-  playerHealth: {fileID: 0}
+  hitSfx: {fileID: 8300000, guid: f5da32e7942e01343b78c80a9b3a5152, type: 3}
+  hitSfxVolume: 1

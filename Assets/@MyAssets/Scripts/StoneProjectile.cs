@@ -7,6 +7,10 @@ public class StoneProjectile : MonoBehaviour
     public int damage = 1;
     public float lifetime = 5f;
 
+    [Header("SFX")]
+    public AudioClip hitSfx;
+    [Range(0f, 1f)] public float hitSfxVolume = 1f;
+
     private bool hasHit;
 
     public void SetOwner(GameObject owner)
@@ -34,6 +38,10 @@ public class StoneProjectile : MonoBehaviour
             if (collision.transform.root.CompareTag("Player"))
             {
                 HealthSystem.Instance.TakeDamage(damage);
+
+                if (hitSfx != null)
+                    AudioSource.PlayClipAtPoint(hitSfx, transform.position, hitSfxVolume);
+
                 Destroy(gameObject);
                 return;
             }

@@ -21,4 +21,8 @@ public class Weapon : MonoBehaviour
     [Header("Animations")]
     [Tooltip("Optional override controller. Leave empty to use the default animator.")]
     public AnimatorOverrideController animatorOverride;
+
+    [Header("SFX")]
+    public AudioClip attackSfx;
+    [Range(0f, 1f)] public float attackSfxVolume = 1f;
 }
